@@ -1,0 +1,138 @@
+:root {
+    --bg-green-soft: #a1080d33;
+    --inter: "Inter", sans-serif;
+    --poppins: "Poppins", sans-serif;
+}
+
+.bg-green-soft {
+    background-color: var(--bg-green-soft);
+}
+
+.w-200px {
+    max-width: 200px;
+    text-wrap: wrap;
+}
+
+.container-beranda {
+    margin-right: 100px;
+    margin-left: 100px;
+}
+
+nav.navbar .company-name {
+    color: #1e1e1e;
+    font-family: var(--inter);
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: normal;
+    max-width: 117px;
+    text-wrap: wrap;
+}
+
+.beranda .left .content {
+    max-width: 585px;
+}
+
+.beranda .left h1 {
+    color: #003d75;
+    font-family: var(--inter);
+    font-size: 64px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-top: 80px;
+}
+
+.beranda .left p.tagline {
+    color: #000;
+    font-family: var(--inter);
+    font-size: 36px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin-top: 20px;
+}
+
+.beranda .left button {
+    color: #fff;
+    text-align: center;
+    font-family: var(--poppins);
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    margin-top: 80px;
+}
+
+.beranda .left p.warning {
+    color: #003d75;
+    font-family: var(--poppins);
+    font-size: 26px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin-left: 20px;
+}
+
+.beranda .right {
+    padding-left: 200px;
+}
+
+.hitung-mundur .card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    border-radius: 20px;
+
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+    border: 1px solid rgba(255, 255, 255, 0.41);
+}
+
+.hitung-mundur p.highlight {
+    color: #FFF;
+    font-family: var(--poppins);
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.hitung-mundur .card span {
+    color: #000;
+    font-family: var(--poppins);
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 100%; /* 40px */
+}
+
+.hitung-mundur .card h5 {
+    margin-top: 10px;
+    color: #000;
+    font-family: var(--poppins);
+    font-size: 120px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 100%;
+    margin-bottom: 0;
+}
+
+.hitung-mundur .card.peserta {
+    padding: 65px 20px;
+}
+
+.hitung-mundur .card.peserta span {
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.hitung-mundur .card.peserta h5 {
+    font-size: 140px;
+}
+
