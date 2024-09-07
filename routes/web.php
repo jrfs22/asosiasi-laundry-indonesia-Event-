@@ -3,6 +3,8 @@
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\BerandaController;
 use App\Http\Controllers\EventsController;
+use App\Http\Controllers\MembersController;
+use App\Http\Controllers\ParticipantsController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\RewardController;
 use Illuminate\Support\Facades\Route;
@@ -27,8 +29,12 @@ Route::middleware('auth')->group(function () {
         Route::get('', [EventsController::class, 'index'])->name('events');
     });
 
-    Route::prefix('registrasi')->group(function () {
-        Route::get('pendaftar', [RegistrationController::class, 'pendaftar'])->name('registrasi.pendaftar');
+    Route::prefix('pendaftar')->group(function () {
+        Route::get('', [ParticipantsController::class, 'index'])->name('pendaftar');
+    });
+
+    Route::prefix('member')->group(function () {
+        Route::get('', [MembersController::class, 'index'])->name('member');
     });
 
     Route::get('logout', [AuthenticationController::class, 'logout'])->name('logout');

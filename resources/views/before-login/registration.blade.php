@@ -16,14 +16,30 @@
 @section('content')
 
     <div class="registration d-flex flex-column align-items-center justify-content-center mt-4 mb-4">
-
-        <div class="card wizard-form">
-            <div class="card-body wizard-content">
-                <h4 class="card-title">Registrasi workshop</h4>
-                <form action="#" class="validation-wizard wizard-circle">
-                    <!-- Step 1 -->
-                    <h6>Data Diri</h6>
-                    <section>
+        <div class="card wizard-form animate__animated animate__fadeInDown">
+            <div class="container">
+                <form action="" method="post" class="f1">
+                    <h4>Registrasi Workshop</h4>
+                    <div class="f1-steps mb-3">
+                        <div class="f1-progress">
+                            <div class="f1-progress-line" data-now-value="33.3" data-number-of-steps="3"
+                                style="width: 33.3%;">
+                            </div>
+                        </div>
+                        <div class="f1-step active">
+                            <div class="f1-step-icon"><i class="fa fa-user"></i></div>
+                            <p>Data diri</p>
+                        </div>
+                        <div class="f1-step">
+                            <div class="f1-step-icon"><i class="fa fa-list"></i></div>
+                            <p>Peserta</p>
+                        </div>
+                        <div class="f1-step">
+                            <div class="f1-step-icon"><i class="fa fa-credit-card"></i></div>
+                            <p>Pembayaran</p>
+                        </div>
+                    </div>
+                    <fieldset>
                         <div class="row">
                             <div class="col-md-12 mb-3">
                                 <x-forms.input2 name="name" label="Nama Lengkap" placeholder="Adi Sucipto" />
@@ -35,10 +51,10 @@
                                 <x-forms.input2 name="phone_number" label="Nomor Telepon" placeholder="0812345678" />
                             </div>
                             <div class="col-md-6 mb-3">
-                                <x-forms.input2 name="email" label="Alamat Email (jika ada)" placeholder="email@email.com"
-                                    required=0 />
+                                <x-forms.input2 name="email" label="Alamat Email (jika ada)"
+                                    placeholder="email@email.com" required=0 />
                             </div>
-                            <div class="col-md-12 mb-3">
+                            <div class="col-md-12 mb-3" id="isMember">
                                 <x-forms.select name="member" label="Apakah anda tertarik untuk bergabung dengan ASLI?">
                                     <option value="ya">Ya</option>
                                     <option value="tidak">Tidak</option>
@@ -54,10 +70,13 @@
                                 </x-forms.select>
                             </div>
                         </div>
-                    </section>
-                    <!-- Step 2 -->
-                    <h6>Peserta</h6>
-                    <section>
+                        <div class="f1-buttons">
+                            <button type="button" class="btn btn-primary btn-next w-100">Selanjutnya <i
+                                    class="fa fa-arrow-right"></i></button>
+                        </div>
+                    </fieldset>
+                    <!-- step 2 -->
+                    <fieldset>
                         <div class="row">
                             <label class="form-label">Jumlah tiket</label>
                             <div class="col-md-3 mb-3">
@@ -89,11 +108,11 @@
                                         <div class="col-md-12 mb-3">
                                             <h5>Peserta 1</h5>
                                         </div>
-                                        <div class="col-md-7 mb-3">
+                                        <div class="col-md-7 mb-3" id="firstName">
                                             <x-forms.input2 name="name[]" label="Nama" placeholder="Adi Sucipto"
                                                 disabled=1 />
                                         </div>
-                                        <div class="col-md-5 mb-3">
+                                        <div class="col-md-5 mb-3" id="firstPhoneNumber">
                                             <x-forms.input2 name="phone_number[]" label="Nomor telepon"
                                                 placeholder="0812345678" disabled=1 />
                                         </div>
@@ -105,59 +124,93 @@
                                 </div>
                             </div>
                         </div>
-                    </section>
 
-                    <!-- Step 3 -->
-                    <h6>Pembayaran</h6>
-                    <section>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label" for="wint1">Interview For :</label>
-                                    <input type="text" class="form-control required" id="wint1" />
+                        <div class="f1-buttons">
+                            <button type="button" class="btn btn-warning btn-previous  w-100">
+                                <i class="fa fa-arrow-left"></i>
+                                Sebelumnya
+                            </button>
+                            <button type="button" class="btn btn-primary btn-next w-100 mt-2">
+                                Selanjutnya <i class="fa fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </fieldset>
+                    <!-- step 3 -->
+                    <fieldset>
+                        <div class="payment">
+                            <h5>Pemesanan #0709200400001</h5>
+                            <p class="subtitle">7 September 2024</p>
+                            <div class="table-responsive mb-4 border rounded-1">
+                                <table class="table text-nowrap mb-0 align-middle">
+                                    <thead>
+                                        <th>Nama pemesan</th>
+                                        <th>Member</th>
+                                        <th>Jumlah</th>
+                                        <th>Harga</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Supriadi</td>
+                                            <td>Ya</td>
+                                            <td>4</td>
+                                            <td>Rp 1.000.000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="total-container">
+                                <div class="detail">
+                                    <div class="left">Subtotal</div>
+                                    <div class="right">Rp 1.000.000</div>
                                 </div>
-                                <div class="mb-3">
-                                    <label class="form-label" for="wintType1">Interview Type :</label>
-                                    <select class="form-select required" id="wintType1"
-                                        data-placeholder="Type to search cities" name="wintType1">
-                                        <option value="Banquet">Normal</option>
-                                        <option value="Fund Raiser">Difficult</option>
-                                        <option value="Dinner Party">Hard</option>
-                                    </select>
+                                <div class="detail">
+                                    <div class="left">Diskon (30%)</div>
+                                    <div class="right">Rp 300.000</div>
                                 </div>
-                                <div class="mb-3">
-                                    <label class="form-label" for="wLocation1">Location :</label>
-                                    <select class="form-select required" id="wLocation1" name="wlocation">
-                                        <option value="">Select City</option>
-                                        <option value="India">India</option>
-                                        <option value="USA">USA</option>
-                                        <option value="Dubai">Dubai</option>
-                                    </select>
+                                <div class="line"></div>
+                                <div class="detail">
+                                    <div class="left">Harga Total</div>
+                                    <div class="right">Rp 700.000</div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label" for="wjobTitle2">Interview Date :</label>
-                                    <input type="date" class="form-control required" id="wjobTitle2" />
-                                </div>
-                                <div class="mb-3">
-                                    <label for="customRadio16" class="form-label">Requirements :</label>
-                                    <div class="c-inputs-stacked">
-                                        <div class="form-check">
-                                            <input type="radio" id="customRadio16" name="customRadio"
-                                                class="form-check-input" />
-                                            <label class="form-check-label" for="customRadio16">Employee</label>
+                            <div class="line-2"></div>
+                            <div class="payment-detail mt-3">
+                                <h5>Tujuan Pembayaran</h5>
+                                <p class="subtitle">Metode Pembayaran</p>
+                                <div class="bank">
+                                    <span>Bank BCA</span>
+                                    <div class="row">
+                                        <div class="col-6">1751668451</div>
+                                        <div class="col-6 text-end">
+                                            <a id="copy-bank-account" data-copy="1751668451">
+                                                Salin <i class="fa fa-copy"></i>
+                                            </a>
                                         </div>
-                                        <div class="form-check">
-                                            <input type="radio" id="customRadio17" name="customRadio"
-                                                class="form-check-input" />
-                                            <label class="form-check-label" for="customRadio17">Contract</label>
+                                    </div>
+                                </div>
+                                <div class="tagihan mt-2">
+                                    <span>Total Tagihan</span>
+                                    <div class="row">
+                                        <div class="col-6">Rp700,000</div>
+                                        <div class="col-6 text-end">
+                                            <a id="copy-tagihan" data-copy="700000">
+                                                Salin <i class="fa fa-copy"></i>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </section>
+                        <div class="f1-buttons">
+                            <button type="button" class="btn btn-warning btn-previous  w-100">
+                                <i class="fa fa-arrow-left"></i>
+                                Sebelumnya
+                            </button>
+                            <button type="button" class="btn btn-primary btn-next w-100 mt-2">
+                                Proses Pembayaran <i class="fa fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </fieldset>
                 </form>
             </div>
         </div>
@@ -171,11 +224,104 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('assets/js/jquery-steps.js') }}"></script>
-    <script src="{{ asset('assets/js/jquery-validation.js') }}"></script>
-    <script src="{{ asset('assets/js/form-wizard.js') }}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script>
+        function scroll_to_class(element_class, removed_height) {
+            var scroll_to = $(element_class).offset().top - removed_height;
+            if ($(window).scrollTop() != scroll_to) {
+                $('html, body').stop().animate({
+                    scrollTop: scroll_to
+                }, 0);
+            }
+        }
+
+        function bar_progress(progress_line_object, direction) {
+            var number_of_steps = progress_line_object.data('number-of-steps');
+            var now_value = progress_line_object.data('now-value');
+            var new_value = 0;
+            if (direction == 'right') {
+                new_value = now_value + (100 / number_of_steps);
+            } else if (direction == 'left') {
+                new_value = now_value - (100 / number_of_steps);
+            }
+            progress_line_object.attr('style', 'width: ' + new_value + '%;').data('now-value', new_value);
+        }
+
+        $(document).ready(function() {
+            // Form
+            $('.f1 fieldset:first').fadeIn('slow');
+
+            $('.f1 input[type="text"], .f1 input[type="password"], .f1 textarea').on('focus', function() {
+                $(this).removeClass('input-error');
+            });
+
+            $('.f1 .btn-next').on('click', function() {
+                var parent_fieldset = $(this).parents('fieldset');
+                var next_step = true;
+                // navigation steps / progress steps
+                var current_active_step = $(this).parents('.f1').find('.f1-step.active');
+                var progress_line = $(this).parents('.f1').find('.f1-progress-line');
+
+                // validasi form
+                parent_fieldset.find('input[type="text"], input[type="password"], textarea, select').each(
+                    function() {
+                        if ($(this).val() == "") {
+                            $(this).addClass('input-error');
+                            next_step = false;
+                        } else {
+                            $(this).removeClass('input-error');
+                        }
+                    }
+                );
+
+
+                if (next_step) {
+                    parent_fieldset.fadeOut(400, function() {
+                        current_active_step.removeClass('active').addClass('activated').next()
+                            .addClass('active');
+                        bar_progress(progress_line, 'right');
+                        // show next step
+                        $(this).next().fadeIn();
+                        // scroll window to beginning of the form
+                        scroll_to_class($('.f1'), 20);
+                    });
+                }
+            });
+
+            $('.f1 .btn-previous').on('click', function() {
+                var current_active_step = $(this).parents('.f1').find('.f1-step.active');
+                var progress_line = $(this).parents('.f1').find('.f1-progress-line');
+
+                $(this).parents('fieldset').fadeOut(400, function() {
+                    current_active_step.removeClass('active').prev().removeClass('activated')
+                        .addClass('active');
+                    bar_progress(progress_line, 'left');
+                    $(this).prev().fadeIn();
+                    scroll_to_class($('.f1'), 20);
+                });
+            });
+
+            $('.f1').on('submit', function(e) {
+                $(this).find('input[type="text"], input[type="password"], textarea').each(function() {
+                    if ($(this).val() == "") {
+                        e.preventDefault();
+                        $(this).addClass('input-error');
+                    } else {
+                        $(this).removeClass('input-error');
+                    }
+                });
+            });
+        });
+    </script>
     <script>
         $(document).ready(function() {
+            $('#name,#phone_number').on('keyup', function () {
+                $("#firstName input").val($("#name").val())
+                $("#firstPhoneNumber input").val($("#phone_number").val())
+
+            })
+
             $('.btn-number').click(function(e) {
                 e.preventDefault();
 
@@ -266,6 +412,38 @@
 
                 $('.repeater-container').append(newForm);
             }
+
+            $('#copy-bank-account, #copy-tagihan').on('click', function(e) {
+                e.preventDefault();
+                var copyText = $(this).attr('data-copy');
+
+                // Try to use the modern Clipboard API
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(copyText).then(() => {
+                        $(this).html('Tersalin <i class="fa fa-check"></i>');
+                        setTimeout(() => {
+                            $(this).html('Salin <i class="fa fa-copy"></i>');
+                        }, 2000);
+                    }).catch(err => {
+                        console.error('Failed to copy text: ', err);
+                    });
+                } else {
+                    // Fallback for browsers that do not support the Clipboard API
+                    var tempInput = $('<input>');
+                    $('body').append(tempInput);
+                    tempInput.val(copyText).select();
+                    try {
+                        document.execCommand('copy');
+                        $(this).html('Tersalin <i class="fa fa-check"></i>');
+                        setTimeout(() => {
+                            $(this).html('Salin <i class="fa fa-copy"></i>');
+                        }, 2000);
+                    } catch (err) {
+                        console.error('Fallback: Oops, unable to copy', err);
+                    }
+                    tempInput.remove();
+                }
+            });
         });
     </script>
 @endpush

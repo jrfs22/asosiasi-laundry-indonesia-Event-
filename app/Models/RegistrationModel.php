@@ -14,6 +14,7 @@ class RegistrationModel extends Model
 
     protected $fillable = [
         'event_id',
+        'participant_id',
         'tickets',
         'amount',
         'discount',

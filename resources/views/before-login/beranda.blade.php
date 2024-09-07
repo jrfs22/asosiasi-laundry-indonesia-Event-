@@ -97,7 +97,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Set the date we're counting down to
-            var countDownDate = new Date("Sep 07, 2024 15:40:00").getTime();
+            var countDownDate = new Date("Sep 08, 2024 15:40:00").getTime();
 
             var countdownFunction = setInterval(function() {
                 var now = new Date().getTime();

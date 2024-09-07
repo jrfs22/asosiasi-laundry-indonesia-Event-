@@ -7,7 +7,7 @@
 @endpush
 
 @section('content')
-    <x-card.breadcrumb main="Home" current="Pendaftar" route="{{ route('registrasi.pendaftar') }}" />
+    <x-card.breadcrumb main="Home" current="Pendaftar" route="{{ route('pendaftar') }}" />
 
     <div class="card card-body">
         <div class="row">
@@ -28,10 +28,10 @@
         <x-table.basic>
             @slot('slotHead')
                 <th>Event</th>
-                <th class="text-center">Pendaftar</th>
-                <th>Jumlah pembayaran</th>
-                <th>Diskon</th>
-                <th>Status</th>
+                <th>Pendaftar</th>
+                <th>Nomor HP</th>
+                <th>Sertifikat</th>
+                <th>Keanggotaan</th>
             @endslot
 
             @slot('slotBody')
@@ -40,17 +40,17 @@
                         <td>
                             <span>{{ $item->event->name }}</span>
                         </td>
-                        <td class="text-center">
-                            <span >{{ $item->tickets }}</span>
+                        <td>
+                            <span >{{ $item->name }}</span>
                         </td>
                         <td>
-                            <span>{{ idrFormat($item->amount) }}</span>
+                            <span>{{ $item->phone_number }}</span>
                         </td>
                         <td>
-                            <span>{{ idrFormat($item->discount) }}</span>
+                            <span>{{ $item->certificate_name }}</span>
                         </td>
                         <td>
-                            <span class="badge {{ $item->payment_status == 'selesai' ? 'bg-success' : 'bg-warning' }}">{{ $item->payment_status }}</span>
+                            <span>{{ $item->type }}</span>
                         </td>
                     </tr>
                 @endforeach
