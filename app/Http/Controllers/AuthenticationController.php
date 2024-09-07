@@ -56,7 +56,7 @@ class AuthenticationController extends Controller
                     'success'
                 );
 
-                return redirect()->intended('reward');
+                return redirect()->intended('events');
             }
 
             $this->alert(

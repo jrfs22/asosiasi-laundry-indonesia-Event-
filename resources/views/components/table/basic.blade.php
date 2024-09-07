@@ -29,6 +29,16 @@
             $('#input-search').on('keyup', function() {
                 table.search(this.value).draw();
             });
+
+            $('#filter-dropdown-' + id).on('change', function() {
+                var selectedValue = this.value
+
+                if (selectedValue === 'all') {
+                    table.search('').draw()
+                } else {
+                    table.search(selectedValue).draw()
+                }
+            });
         });
     </script>
 @endpush

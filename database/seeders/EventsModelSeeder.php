@@ -2,12 +2,12 @@
 
 namespace Database\Seeders;
 
-use App\Models\RewardsModel;
 use App\Models\User;
+use App\Models\EventsModel;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-class RewardSeeder extends Seeder
+class EventsModelSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,10 +15,9 @@ class RewardSeeder extends Seeder
     public function run(): void
     {
         foreach (User::all() as $user) {
-            RewardsModel::create([
-                'user_id' => $user->id,
-                'total_points' => 0, // Default value
-            ]);
+            EventsModel::factory()->count(2)->state([
+                'user_id' => $user->id
+            ])->create();
         }
     }
 }
