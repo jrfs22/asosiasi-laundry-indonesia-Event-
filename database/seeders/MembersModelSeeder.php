@@ -2,17 +2,17 @@
 
 namespace Database\Seeders;
 
-use App\Models\RewardHistoriesModel;
+use App\Models\MembersModel;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class RewardHistoriesSeeder extends Seeder
+class MembersModelSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        RewardHistoriesModel::factory()->count(50)->create();
+        MembersModel::factory()->count(10)->create();
     }
 }

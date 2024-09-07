@@ -15,12 +15,30 @@
                     <span class="hide-menu">Home</span>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link {{ isRouteActive('reward') ? 'active' : '' }}"
-                        href="{{ route('reward') }}" aria-expanded="false">
+                    <a class="sidebar-link {{ isRouteActive('events') ? 'active' : '' }}"
+                        href="{{ route('events') }}" aria-expanded="false">
                         <span>
-                            <i class="ti ti-award"></i>
+                            <i class="ti ti-calendar-event"></i>
                         </span>
-                        <span class="hide-menu">Reward</span>
+                        <span class="hide-menu">Events</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link {{ isRouteActive('registrasi.pendaftar') ? 'active' : '' }}"
+                        href="{{ route('registrasi.pendaftar') }}" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-ticket"></i>
+                        </span>
+                        <span class="hide-menu">Pendaftar</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link {{ isRouteActive('registrasi.pendaftar') ? 'active' : '' }}"
+                        href="{{ route('registrasi.pendaftar') }}" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-users"></i>
+                        </span>
+                        <span class="hide-menu">Peserta</span>
                     </a>
                 </li>
             </ul>
