@@ -19,8 +19,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
             EventsModelSeeder::class,
-            RegistrationModelSeeder::class,
             ParticipantsModelSeeder::class,
+            RegistrationModelSeeder::class,
             MembersModelSeeder::class
         ]);
     }

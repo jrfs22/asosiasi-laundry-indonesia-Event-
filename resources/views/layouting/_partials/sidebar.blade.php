@@ -24,8 +24,8 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link {{ isRouteActive('registrasi.pendaftar') ? 'active' : '' }}"
-                        href="{{ route('registrasi.pendaftar') }}" aria-expanded="false">
+                    <a class="sidebar-link {{ isRouteActive('pendaftar') ? 'active' : '' }}"
+                        href="{{ route('pendaftar') }}" aria-expanded="false">
                         <span>
                             <i class="ti ti-ticket"></i>
                         </span>
@@ -33,12 +33,12 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link {{ isRouteActive('registrasi.pendaftar') ? 'active' : '' }}"
-                        href="{{ route('registrasi.pendaftar') }}" aria-expanded="false">
+                    <a class="sidebar-link {{ isRouteActive('member') ? 'active' : '' }}"
+                        href="{{ route('member') }}" aria-expanded="false">
                         <span>
                             <i class="ti ti-users"></i>
                         </span>
-                        <span class="hide-menu">Peserta</span>
+                        <span class="hide-menu">Member</span>
                     </a>
                 </li>
             </ul>

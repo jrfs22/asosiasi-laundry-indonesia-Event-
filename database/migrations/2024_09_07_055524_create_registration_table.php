@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('registration', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('event_id');
+            $table->unsignedBigInteger('participant_id');
             $table->integer('tickets');
             $table->double('amount');
             $table->double('discount');
@@ -22,6 +23,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('event_id')->references('id')->on('events');
+            $table->foreign('participant_id')->references('id')->on('participants');
         });
     }
 

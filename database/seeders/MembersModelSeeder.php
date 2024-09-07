@@ -13,6 +13,27 @@ class MembersModelSeeder extends Seeder
      */
     public function run(): void
     {
-        MembersModel::factory()->count(10)->create();
+        // User::insert([
+        //     [
+        //         'name' => 'Admin amin',
+        //         'email' => 'amin@admin.com',
+        //         'password' => Hash::make('123'),
+        //         'role' => 'admin'
+        //     ],
+        //     [
+        //         'name' => 'User Amin',
+        //         'email' => 'amin@user.com',
+        //         'password' => Hash::make('123'),
+        //         'role' => 'user'
+        //     ],
+        // ]);
+
+        MembersModel::insert([
+            [
+                'name' => 'Josep Ronaldo Francis Siregar',
+                'phone_number' => '087893504595',
+                'type' => 'Pengurus'
+            ],
+        ]);
     }
 }

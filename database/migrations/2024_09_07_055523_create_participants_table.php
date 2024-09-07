@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('participants', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('registration_id');
+            $table->unsignedBigInteger('event_id');
             $table->string('name');
             $table->string('phone_number');
             $table->string('certificate_name');
@@ -23,7 +23,7 @@ return new class extends Migration
             ]);
             $table->timestamps();
 
-            $table->foreign('registration_id')->references('id')->on('registration');
+            $table->foreign('event_id')->references('id')->on('events');
         });
     }
 
