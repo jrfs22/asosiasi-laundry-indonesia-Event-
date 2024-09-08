@@ -9,13 +9,12 @@ use App\Models\RegistrationModel;
 
 class ParticipantsController extends Controller
 {
-    public function index()
+    public function absensi()
     {
         $events = EventsModel::all();
-        $pendaftar = ParticipantsModel::with('event')->get();
-        // dd($pendaftar);
-        return view('after-login.pendaftar.index')->with([
-            'pendaftar' => $pendaftar,
+        $participants = ParticipantsModel::with('event')->get();
+        return view('after-login.absensi.index')->with([
+            'participants' => $participants,
             'events' => $events
         ]);
     }

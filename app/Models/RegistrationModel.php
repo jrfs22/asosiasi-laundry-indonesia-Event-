@@ -14,12 +14,16 @@ class RegistrationModel extends Model
 
     protected $fillable = [
         'event_id',
-        'participant_id',
+        'name',
+        'email',
+        'phone_number',
         'tickets',
         'amount',
-        'discount',
+        'discount_percentage',
+        'discount_total',
+        'source',
+        'member',
         'payment_status',
-        'qrcode'
     ];
 
     public function event(): BelongsTo

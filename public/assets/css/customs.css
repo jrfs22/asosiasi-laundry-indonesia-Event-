@@ -18,6 +18,10 @@
     margin-left: 100px;
 }
 
+.container-beranda .navbar {
+    margin-top: 80px;
+}
+
 nav.navbar .company-name {
     color: #1e1e1e;
     font-family: var(--inter);
@@ -193,7 +197,7 @@ footer img {
 
 .registration .total-container {
     padding-left: 55%;
-    padding-right: 70px;
+    padding-right: 40px;
 }
 .registration .total-container .detail {
     display: flex;
@@ -241,8 +245,8 @@ footer img {
 
 .registration .payment table,
 .registration .payment .total-container,
-.registration  .payment-detail .bank,
-.registration  .payment-detail .tagihan {
+.registration .payment-detail .bank,
+.registration .payment-detail .tagihan {
     color: rgba(58, 53, 65, 0.87);
     font-family: var(--poppins);
     font-size: 14px;
@@ -252,27 +256,27 @@ footer img {
 }
 
 .registration .payment table thead,
-.registration  .payment-detail .bank .row,
-.registration  .payment-detail .tagihan .row {
+.registration .payment-detail .bank .row,
+.registration .payment-detail .tagihan .row {
     font-weight: 600;
 }
 
-.registration  .payment-detail .bank .row,
-.registration  .payment-detail .tagihan .row {
+.registration .payment-detail .bank .row,
+.registration .payment-detail .tagihan .row {
     font-weight: 600;
     font-size: 16px;
 }
 
 .registration .payment table tbody,
 .registration .payment .total-container,
-.registration  .payment-detail .bank span,
-.registration  .payment-detail .tagihan span {
+.registration .payment-detail .bank span,
+.registration .payment-detail .tagihan span {
     font-weight: 500;
 }
 
-.registration  .payment-detail .bank .row .text-end a,
-.registration  .payment-detail .tagihan .row .text-end a  {
-    color: #003D75;
+.registration .payment-detail .bank .row .text-end a,
+.registration .payment-detail .tagihan .row .text-end a {
+    color: #003d75;
     cursor: pointer;
 }
 
@@ -426,4 +430,203 @@ footer img {
 
 .f1 .input-error {
     border-color: #f35b3f;
+}
+
+.modal .container-btn {
+    display: flex;
+    background: white;
+    position: absolute;
+    top: 10px;
+    right: -54px;
+    border-radius: 50%;
+    padding: 5px;
+}
+
+.modal .btn-close {
+    text-align: center;
+    font-family: var(--poppins);
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.modal-backdrop {
+    background-color: rebeccapurple;
+}
+
+.table-responsive {
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.tickets h5 {
+    color: #003D75;
+    text-align: center;
+    font-family: var(--inter);
+    font-size: 50px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.tickets p {
+    color: #000;
+    text-align: center;
+    font-family: var(--poppins);
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.tickets .detail {
+    color: #000;
+    font-family: var(--poppins);
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.tickets .row{
+    margin-top: 50px;
+}
+
+@media (max-width: 576px) {
+    .container-beranda {
+        margin-right: 0;
+        margin-left: 0;
+    }
+
+    .container-beranda .navbar {
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .container-beranda .navbar-brand {
+        gap: 5px!important;
+    }
+
+
+    .container-beranda .navbar-brand img {
+        width: 80px;
+        height: 80px;
+    }
+
+    nav.navbar .company-name {
+        font-weight: 700;
+        font-size: 16px;
+    }
+
+    .container-beranda .beranda .content {
+        margin-left: 20px;
+        max-width: 75%;
+    }
+
+    .container-beranda .beranda h1{
+        font-size: 28px;
+        margin-top: 30px;
+    }
+
+    .container-beranda .beranda p.tagline {
+        font-size: 18px;
+        margin-top: 10px;
+    }
+
+    .container-beranda .beranda a.btn {
+        font-size: 18px;
+        margin-top: 20px;
+    }
+
+    .container-beranda .beranda p.warning {
+        font-size: 14px;
+        margin-left: 10px;
+    }
+
+    .beranda .right {
+        padding-left: 40px;
+        padding-right: 40px;
+        margin-top: 20px;
+    }
+
+    .hitung-mundur p.highlight {
+        font-size: 20px;
+    }
+
+    .hitung-mundur .card span,
+    .hitung-mundur .card.peserta span {
+        font-size: 20px;
+    }
+
+    .hitung-mundur .card h5 {
+        font-size: 40px;
+    }
+
+    .hitung-mundur .card.peserta {
+        padding: 16px 5px;
+    }
+
+    .hitung-mundur .card.peserta h5 {
+        font-size: 50px;
+    }
+
+    footer {
+        text-align: center;
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+
+    footer img {
+        width: 61px;
+        height: 32px;
+    }
+
+    .modal .container-btn {
+        display: flex;
+        background: white;
+        position: absolute;
+        top: -50px;
+        right: 0;
+        border-radius: 50%;
+        padding: 5px;
+    }
+
+    .registration {
+        margin-right: 15px;
+        margin-left: 15px;
+    }
+
+    .registration .wizard-form {
+        width: 100%;
+        padding: 10px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+
+    .registration .wizard-form h4 {
+        font-size: 25px;
+    }
+
+    .registration .card.wizard-form .form-label {
+        font-size: 14px;
+    }
+
+    .registration .card.wizard-form .form-control, .registration .card.wizard-form .form-select {
+        font-size: 16px;
+    }
+
+    .f1-buttons {
+        font-size: 16px;
+    }
+}
+
+
+/* Small devices (tablets) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+    body {
+        font-size: 15px;
+    }
 }

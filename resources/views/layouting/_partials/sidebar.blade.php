@@ -14,6 +14,7 @@
                     <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
                     <span class="hide-menu">Home</span>
                 </li>
+                @role('super-admin')
                 <li class="sidebar-item">
                     <a class="sidebar-link {{ isRouteActive('events') ? 'active' : '' }}"
                         href="{{ route('events') }}" aria-expanded="false">
@@ -24,6 +25,16 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
+                    <a class="sidebar-link {{ isRouteActive('member') ? 'active' : '' }}"
+                        href="{{ route('member') }}" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-users"></i>
+                        </span>
+                        <span class="hide-menu">Member</span>
+                    </a>
+                </li>
+                @endrole
+                <li class="sidebar-item">
                     <a class="sidebar-link {{ isRouteActive('pendaftar') ? 'active' : '' }}"
                         href="{{ route('pendaftar') }}" aria-expanded="false">
                         <span>
@@ -33,12 +44,12 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link {{ isRouteActive('member') ? 'active' : '' }}"
-                        href="{{ route('member') }}" aria-expanded="false">
+                    <a class="sidebar-link {{ isRouteActive('absensi') ? 'active' : '' }}"
+                        href="{{ route('absensi') }}" aria-expanded="false">
                         <span>
-                            <i class="ti ti-users"></i>
+                            <i class="ti ti-clock"></i>
                         </span>
-                        <span class="hide-menu">Member</span>
+                        <span class="hide-menu">Absensi</span>
                     </a>
                 </li>
             </ul>

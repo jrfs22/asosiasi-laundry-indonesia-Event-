@@ -15,7 +15,7 @@ class EventsModelSeeder extends Seeder
     public function run(): void
     {
         foreach (User::all() as $user) {
-            EventsModel::factory()->count(2)->state([
+            EventsModel::factory()->count(1)->state([
                 'user_id' => $user->id
             ])->create();
         }

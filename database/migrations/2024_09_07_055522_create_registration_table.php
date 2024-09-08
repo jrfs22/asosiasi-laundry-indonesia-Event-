@@ -14,16 +14,21 @@ return new class extends Migration
         Schema::create('registration', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('event_id');
-            $table->unsignedBigInteger('participant_id');
+            $table->string('name');
+            $table->string('phone_number');
+            $table->string('email')->nullable();
             $table->integer('tickets');
             $table->double('amount');
-            $table->double('discount');
-            $table->text('qrcode');
-            $table->string('payment_status');
+            $table->integer('discount_percentage');
+            $table->double('discount_total');
+            $table->string('source');
+            $table->enum('member', [
+                'ya', 'tidak'
+            ])->nullable();
+            $table->string('payment_status')->default('progress');
             $table->timestamps();
 
             $table->foreign('event_id')->references('id')->on('events');
-            $table->foreign('participant_id')->references('id')->on('participants');
         });
     }
 

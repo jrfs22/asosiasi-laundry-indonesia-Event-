@@ -1,4 +1,4 @@
-@props(['name', 'label', 'placeholder', 'type' => 'text', 'required' => true, 'disabled' => false])
+@props(['name', 'label', 'placeholder', 'type' => 'text', 'required' => true, 'disabled' => false, 'readonly' => false])
 
 <label class="form-label" for="{{ $name }}"> {{ $label }}
     @if ($required)
@@ -9,7 +9,7 @@
 <input type="{{ $type }}" class="form-control {{ $required ? 'required' : '' }}" id="{{ $name }}"
     name="{{ $name }}" placeholder="{{ $placeholder }}"
 
-    @if ($disabled)
-        disabled
+    @if ($readonly)
+    readonly
     @endif
     />
