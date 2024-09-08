@@ -51,14 +51,11 @@
                                 <x-forms.input2 name="phone_number" label="Nomor Telepon" placeholder="0812345678" />
                             </div>
                             <div class="col-md-6 mb-3">
-                                <x-forms.input2 name="email" label="Alamat Email (jika ada)"
-                                    placeholder="email@email.com" required=0 />
+                                <x-forms.input2 name="email" label="Alamat Email (jika ada)" placeholder="email@email.com"
+                                    required=0 />
                             </div>
-                            <div class="col-md-12 mb-3" id="isMember">
-                                <x-forms.select name="member" label="Apakah anda tertarik untuk bergabung dengan ASLI?">
-                                    <option value="ya">Ya</option>
-                                    <option value="tidak">Tidak</option>
-                                </x-forms.select>
+                            <div id="member-container">
+
                             </div>
                             <div class="col-md-12 mb-3">
                                 <x-forms.select name="source" label="Tahu tentang acara ini dari mana?">
@@ -126,11 +123,11 @@
                         </div>
 
                         <div class="f1-buttons">
-                            <button type="button" class="btn btn-warning btn-previous  w-100">
+                            <button type="button" class="btn btn-warning btn-previous w-100">
                                 <i class="fa fa-arrow-left"></i>
                                 Sebelumnya
                             </button>
-                            <button type="button" class="btn btn-primary btn-next w-100 mt-2">
+                            <button type="button" class="btn btn-primary btn-next w-100 mt-2" id="checkTotal">
                                 Selanjutnya <i class="fa fa-arrow-right"></i>
                             </button>
                         </div>
@@ -138,8 +135,8 @@
                     <!-- step 3 -->
                     <fieldset>
                         <div class="payment">
-                            <h5>Pemesanan #0709200400001</h5>
-                            <p class="subtitle">7 September 2024</p>
+                            <h5>Pemesanan</h5>
+                            <p class="subtitle">{{ idnDate(now()) }}</p>
                             <div class="table-responsive mb-4 border rounded-1">
                                 <table class="table text-nowrap mb-0 align-middle">
                                     <thead>
@@ -150,10 +147,10 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>Supriadi</td>
-                                            <td>Ya</td>
-                                            <td>4</td>
-                                            <td>Rp 1.000.000</td>
+                                            <td id="tbl_pemesan">Supriadi</td>
+                                            <td id="tbl_isMember">Ya</td>
+                                            <td id="tbl_tickets">4</td>
+                                            <td id="tbl_total">Rp 1.000.000</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -161,16 +158,16 @@
                             <div class="total-container">
                                 <div class="detail">
                                     <div class="left">Subtotal</div>
-                                    <div class="right">Rp 1.000.000</div>
+                                    <div class="right" id="subtotal">Rp 1.000.000</div>
                                 </div>
                                 <div class="detail">
-                                    <div class="left">Diskon (30%)</div>
-                                    <div class="right">Rp 300.000</div>
+                                    <div class="left" id="diskon">Diskon (30%)</div>
+                                    <div class="right" id="totalDiskon">Rp 300.000</div>
                                 </div>
                                 <div class="line"></div>
                                 <div class="detail">
                                     <div class="left">Harga Total</div>
-                                    <div class="right">Rp 700.000</div>
+                                    <div class="right" id="hargaTotal">Rp 700.000</div>
                                 </div>
                             </div>
                             <div class="line-2"></div>
@@ -191,9 +188,9 @@
                                 <div class="tagihan mt-2">
                                     <span>Total Tagihan</span>
                                     <div class="row">
-                                        <div class="col-6">Rp700,000</div>
+                                        <div class="col-6" id="totalTagihan">Rp700,000</div>
                                         <div class="col-6 text-end">
-                                            <a id="copy-tagihan" data-copy="700000">
+                                            <a id="copy-tagihan" data-copy="700000" id="hargaTotalCopy">
                                                 Salin <i class="fa fa-copy"></i>
                                             </a>
                                         </div>
@@ -303,23 +300,28 @@
             });
 
             $('.f1').on('submit', function(e) {
-                $(this).find('input[type="text"], input[type="password"], textarea').each(function() {
-                    if ($(this).val() == "") {
-                        e.preventDefault();
-                        $(this).addClass('input-error');
-                    } else {
-                        $(this).removeClass('input-error');
-                    }
-                });
+                $(this).find('input[type="text"], input[type="password"], textarea, select').each(
+                    function() {
+                        if ($(this).val() == "") {
+                            e.preventDefault();
+                            $(this).addClass('input-error');
+                        } else {
+                            $(this).removeClass('input-error');
+                        }
+                    });
             });
         });
     </script>
     <script>
+        var ticket = 1;
+        var isMember = 'Tidak';
+
         $(document).ready(function() {
-            $('#name,#phone_number').on('keyup', function () {
+            $('#name, #phone_number').on('keyup', function() {
                 $("#firstName input").val($("#name").val())
                 $("#firstPhoneNumber input").val($("#phone_number").val())
 
+                $('#tbl_pemesan').text($("#name").val());
             })
 
             $('.btn-number').click(function(e) {
@@ -334,8 +336,10 @@
                     if (type == 'minus') {
                         if (currentVal > input.attr('min')) {
                             input.val(currentVal - 1).change();
-                            // Remove the last repeater form section
                             $('.repeater-container .repeater-form:last').remove();
+
+                            ticket -= 1;
+                            console.log(ticket);
                         }
                         if (parseInt(input.val()) == input.attr('min')) {
                             $(this).attr('disabled', true);
@@ -344,6 +348,9 @@
                         if (currentVal < input.attr('max')) {
                             input.val(currentVal + 1).change();
                             addRepeaterForm(currentVal + 1);
+                            ticket += 1;
+                            console.log(ticket);
+
                         }
                         if (parseInt(input.val()) == input.attr('max')) {
                             $(this).attr('disabled', true);
@@ -445,5 +452,107 @@
                 }
             });
         });
+
+        $('#phone_number').on('keyup', function() {
+            var phoneNumber = $(this).val();
+
+            if (phoneNumber.length > 11) {
+                $.ajax({
+                    url: '/member/' + phoneNumber,
+                    type: 'GET',
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        if (response.exists) {
+                            $('#member-container').empty();
+
+                            isMember = 'Ya'
+                            $('#tbl_isMember').text(isMember);
+                        } else {
+                            if ($('#member-container').find('select').length === 0) {
+                                $('#member-container').append(`
+                                    <div class="col-md-12 mb-3">
+                                        <label class="form-label" for="member">Apakah anda tertarik untuk bergabung dengan ASLI?
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <select class="form-select" id="member" name="member" required>
+                                            <option value="">Pilih disini</option>
+                                            <option value="ya">Ya</option>
+                                            <option value="tidak">Tidak</option>
+                                        </select>
+                                    </div>
+                                `);
+                            }
+
+                            isMember = 'Tidak'
+                            $('#tbl_isMember').text(isMember);
+                        }
+                    },
+                    error: function() {
+                        console.log('tidak ada');
+                    }
+                });
+            }
+        });
+
+        $(document).on('keyup', 'input[name="phone_number[]"]', function() {
+            var phoneNumber = $(this).val();
+            var inputField = $(this);
+
+            if (phoneNumber.length > 10) {
+                $.ajax({
+                    url: '/member/' + phoneNumber,
+                    type: 'GET',
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        if (response.exists) {
+                            alert('Terdapat lebih dari 1 member');
+
+                            inputField.addClass('input-error');
+                        } else {
+                            inputField.removeClass('input-error');
+                        }
+                    },
+                    error: function() {
+                        alert('Terjadi kesalahan saat memeriksa nomor telepon.');
+                    }
+                });
+            }
+        });
+
+        function formatRupiah(amount) {
+            const formatter = new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR'
+            });
+
+            // Format the amount and return it
+            return formatter.format(amount);
+        }
+
+
+        $('#checkTotal').on('click', function() {
+            $('#tbl_tickets').text(ticket);
+
+            var hargaDasar = ((isMember === 'Ya') ? 200000 : 250000)
+            var diskon = ((ticket === 2) ? 20 : ((ticket === 3) ? 25 : (ticket > 3 ? 30 : 0)))
+
+            var subtotal = hargaDasar * ticket;
+            var totalDiskon = (subtotal * diskon) / 100;
+            var totalHarga = subtotal - totalDiskon;
+
+
+            $('#tbl_total').text(formatRupiah(hargaDasar));
+            $('#diskon').text("Diskon (" + diskon + "%)");
+            $('#totalDiskon').text(formatRupiah(totalDiskon));
+
+            $('#subtotal').text(formatRupiah(subtotal));
+            $('#hargaTotal').text(formatRupiah(totalHarga));
+            $('#totalTagihan').text(formatRupiah(totalHarga));
+            $('#copy-tagihan').attr('data-copy', totalHarga);
+        })
     </script>
 @endpush

@@ -21,6 +21,10 @@ Route::middleware('guest')->group(function () {
 
 
     Route::get('registrasi', [RegistrationController::class, 'index'])->name('registrasi');
+
+    Route::prefix('member')->group(function () {
+        Route::get('{phone_number}', [MembersController::class, 'isMember'])->name('member.check');
+    });
 });
 
 
