@@ -18,7 +18,8 @@
     <div class="registration d-flex flex-column align-items-center justify-content-center mt-4 mb-4">
         <div class="card wizard-form animate__animated animate__fadeInDown">
             <div class="container">
-                <form action="" method="post" class="f1">
+                <form action="{{ route('registrasi.store') }}" method="POST" class="f1">
+                    @csrf
                     <h4>Registrasi Workshop</h4>
                     <div class="f1-steps mb-3">
                         <div class="f1-progress">
@@ -85,7 +86,7 @@
                                         </button>
                                     </span>
                                     <input type="text" name="quant[1]" class="form-control input-number" value="1"
-                                        min="1" max="10" disabled>
+                                        min="1" max="10" readonly>
                                     <span class="input-group-append">
                                         <button type="button" class="btn btn-primary btn-number plus" data-type="plus"
                                             data-field="quant[1]">
@@ -106,15 +107,19 @@
                                             <h5>Peserta 1</h5>
                                         </div>
                                         <div class="col-md-7 mb-3" id="firstName">
-                                            <x-forms.input2 name="name[]" label="Nama" placeholder="Adi Sucipto"
-                                                disabled=1 />
+                                            <x-forms.input2 name="nameArr[]" label="Nama" placeholder="Adi Sucipto"
+                                                readonly=1 />
                                         </div>
                                         <div class="col-md-5 mb-3" id="firstPhoneNumber">
-                                            <x-forms.input2 name="phone_number[]" label="Nomor telepon"
-                                                placeholder="0812345678" disabled=1 />
+                                            <x-forms.input2 name="phone_number_arr[]" label="Nomor telepon"
+                                                placeholder="0812345678" readonly=1 />
                                         </div>
-                                        <div class="col-md-12 mb-3">
-                                            <x-forms.input2 name="sertificate[]" label="Nama pada sertifikat"
+                                        <div class="col-md-5 mb-3" id="firstLaundry">
+                                            <x-forms.input2 name="laundry_arr[]" label="Nama laundry (Jika ada)"
+                                                placeholder="Adi laundry keren" required=0 readonly=1 />
+                                        </div>
+                                        <div class="col-md-7 mb-3">
+                                            <x-forms.input2 name="certificate[]" label="Nama pada sertifikat"
                                                 placeholder="Adi laundry keren" />
                                         </div>
                                     </div>
@@ -203,7 +208,7 @@
                                 <i class="fa fa-arrow-left"></i>
                                 Sebelumnya
                             </button>
-                            <button type="button" class="btn btn-primary btn-next w-100 mt-2">
+                            <button type="submit" class="btn btn-primary btn-next w-100 mt-2">
                                 Proses Pembayaran <i class="fa fa-arrow-right"></i>
                             </button>
                         </div>
@@ -261,16 +266,15 @@
                 var progress_line = $(this).parents('.f1').find('.f1-progress-line');
 
                 // validasi form
-                parent_fieldset.find('input[type="text"], input[type="password"], textarea, select').each(
-                    function() {
-                        if ($(this).val() == "") {
-                            $(this).addClass('input-error');
-                            next_step = false;
-                        } else {
-                            $(this).removeClass('input-error');
-                        }
+                parent_fieldset.find('input[type="text"], input[type="password"], textarea, select').not(
+                    '[name="laundry_arr[]"]').each(function() {
+                    if ($(this).val() == "") {
+                        $(this).addClass('input-error');
+                        next_step = false;
+                    } else {
+                        $(this).removeClass('input-error');
                     }
-                );
+                });
 
 
                 if (next_step) {
@@ -300,7 +304,8 @@
             });
 
             $('.f1').on('submit', function(e) {
-                $(this).find('input[type="text"], input[type="password"], textarea, select').each(
+                $(this).find('input[type="text"], input[type="password"], textarea, select').not(
+                    '[name="laundry_arr[]"]').each(
                     function() {
                         if ($(this).val() == "") {
                             e.preventDefault();
@@ -315,11 +320,13 @@
     <script>
         var ticket = 1;
         var isMember = 'Tidak';
+        var isPengurus = false;
 
         $(document).ready(function() {
-            $('#name, #phone_number').on('keyup', function() {
+            $('#name, #phone_number, #laundry').on('keyup', function() {
                 $("#firstName input").val($("#name").val())
                 $("#firstPhoneNumber input").val($("#phone_number").val())
+                $("#firstLaundry input").val($("#laundry").val())
 
                 $('#tbl_pemesan').text($("#name").val());
             })
@@ -404,16 +411,20 @@
                     <h5>Peserta ${index}</h5>
                 </div>
                 <div class="col-md-7 mb-3">
-                    <label class="form-label" for="name[]"> Nama <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control required" id="name[]" name="name[]" placeholder="Adi Sucipto">
+                    <label class="form-label" for="nameArr[]"> Nama <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control required" id="nameArr[]" name="nameArr[]" placeholder="Adi Sucipto">
                 </div>
                 <div class="col-md-5 mb-3">
-                    <label class="form-label" for="phone_number[]"> Nomor telepon <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control required" id="phone_number[]" name="phone_number[]" placeholder="0812345678">
+                    <label class="form-label" for="phone_number_arr[]"> Nomor telepon <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control required" id="phone_number_arr[]" name="phone_number_arr[]" placeholder="0812345678">
                 </div>
-                <div class="col-md-12 mb-3">
-                    <label class="form-label" for="sertificate[]"> Nama pada sertifikat <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control required" id="sertificate[]" name="sertificate[]" placeholder="Adi laundry keren">
+                <div class="col-md-5 mb-3">
+                    <label class="form-label" for="laundry_arr[]"> Nama laundry (Jika ada)</label>
+                    <input type="text" class="form-control" id="laundry_arr[]" name="laundry_arr[]" placeholder="Adi laundry">
+                </div>
+                <div class="col-md-7 mb-3">
+                    <label class="form-label" for="certificate[]"> Nama pada sertifikat <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control required" id="certificate[]" name="certificate[]" placeholder="Adi laundry keren">
                 </div>
             </div>`;
 
@@ -467,6 +478,11 @@
                         if (response.exists) {
                             $('#member-container').empty();
 
+                            if (response.member.type === 'pengurus') {
+                                isPengurus = true;
+                            }
+
+
                             isMember = 'Ya'
                             $('#tbl_isMember').text(isMember);
                         } else {
@@ -496,7 +512,7 @@
             }
         });
 
-        $(document).on('keyup', 'input[name="phone_number[]"]', function() {
+        $(document).on('keyup', 'input[name="phone_number_arr[]"]', function() {
             var phoneNumber = $(this).val();
             var inputField = $(this);
 
@@ -509,7 +525,12 @@
                     },
                     success: function(response) {
                         if (response.exists) {
-                            alert('Terdapat lebih dari 1 member');
+
+                            Swal.fire({
+                                title: "Member berlebihan terdeteksi",
+                                text: "Maksimal hanya 1 member dalam registrasi",
+                                icon: "error"
+                            });
 
                             inputField.addClass('input-error');
                         } else {
@@ -538,7 +559,7 @@
             $('#tbl_tickets').text(ticket);
 
             var hargaDasar = ((isMember === 'Ya') ? 200000 : 250000)
-            var diskon = ((ticket === 2) ? 20 : ((ticket === 3) ? 25 : (ticket > 3 ? 30 : 0)))
+            var diskon = isPengurus ? 30 : ((ticket === 2) ? 20 : ((ticket === 3) ? 25 : (ticket > 3 ? 30 : 0)))
 
             var subtotal = hargaDasar * ticket;
             var totalDiskon = (subtotal * diskon) / 100;

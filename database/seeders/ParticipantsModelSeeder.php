@@ -15,8 +15,10 @@ class ParticipantsModelSeeder extends Seeder
      */
     public function run(): void
     {
-        foreach (EventsModel::all() as $event) {
-            ParticipantsModel::factory()->count(3)->state([
+        foreach (RegistrationModel::all() as $regist) {
+            $event = EventsModel::inRandomOrder()->first();
+            ParticipantsModel::factory()->count(1)->state([
+                'registration_id' => $regist->id,
                 'event_id' => $event->id
             ])->create();
         }

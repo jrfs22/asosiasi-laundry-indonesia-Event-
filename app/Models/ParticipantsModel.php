@@ -14,10 +14,13 @@ class ParticipantsModel extends Model
 
     protected $fillable = [
         'event_id',
+        'registration_id',
+        'laundry_name',
         'name',
         'phone_number',
         'certificate_name',
-        'type'
+        'type',
+        'qrcode'
     ];
 
     public function event(): BelongsTo

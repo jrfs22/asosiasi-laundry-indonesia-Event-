@@ -18,9 +18,11 @@ class ParticipantsModelFactory extends Factory
     {
         return [
             'name' => fake()->name(),
+            'laundry_name' => fake()->name(),
             'phone_number' => fake()->randomDigitNotZero(),
             'certificate_name' => fake()->name(),
-            'type' => fake()->randomElement(['member', 'non member'])
+            'type' => fake()->randomElement(['member', 'non member']),
+            'qrcode' => fake()->name(),
         ];
     }
 }

@@ -56,7 +56,15 @@ class AuthenticationController extends Controller
                     'success'
                 );
 
-                return redirect()->intended('events');
+                $user = Auth::user();
+
+                if ($user->can('view events')) {
+                    return redirect()->intended('events');
+                }
+
+                if ($user->can('view pendaftar')) {
+                    return redirect()->intended('pendaftar');
+                }
             }
 
             $this->alert(

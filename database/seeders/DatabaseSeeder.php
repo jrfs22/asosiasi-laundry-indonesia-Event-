@@ -11,16 +11,14 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
         $this->call([
+            RolesAndPermissionSeeder::class,
             UserSeeder::class,
             EventsModelSeeder::class,
-            ParticipantsModelSeeder::class,
-            RegistrationModelSeeder::class,
+            // RegistrationModelSeeder::class,
+            // ParticipantsModelSeeder::class,
             MembersModelSeeder::class
         ]);
     }

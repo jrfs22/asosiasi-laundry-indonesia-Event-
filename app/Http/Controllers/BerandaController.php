@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\EventsModel;
 use Illuminate\Http\Request;
 
 class BerandaController extends Controller
 {
     public function index()
     {
-        return view('before-login.beranda');
+        $event = EventsModel::with('participants')->latest()->first();
+
+        $event->summary = $event->participants()->count();
+        // dd($event);
+        return view('before-login.beranda')->with('event', $event);
     }
 }

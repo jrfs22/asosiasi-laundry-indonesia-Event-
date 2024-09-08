@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class EventsModel extends Model
 {
@@ -21,4 +22,9 @@ class EventsModel extends Model
         'max_participants',
         'status'
     ];
+
+    public function participants(): HasMany
+    {
+        return $this->hasMany(ParticipantsModel::class, 'event_id', 'id');
+    }
 }

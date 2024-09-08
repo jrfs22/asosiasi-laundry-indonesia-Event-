@@ -17,12 +17,12 @@ class EventsModelFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
+            'name' => 'Workshop Penanganan Laundry Satuan & Teknik Pengangkatan Noda Satuan',
             'poster' => fake()->name() . fake()->fileExtension(),
             'date' => now(),
             'start_time' => '10:00:00',
             'end_time' => '12:00:00',
-            'max_participants' => fake()->randomDigitNotNull(),
+            'max_participants' => 50,
             'status' => fake()->randomElement(['selesai', 'sedang berjalan'])
         ];
     }
