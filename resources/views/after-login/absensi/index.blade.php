@@ -27,18 +27,19 @@
     <div class="card card-body">
         <x-table.basic>
             @slot('slotHead')
-                <th>Event</th>
+                <th class="w-20">Event</th>
                 <th>Nama</th>
                 <th>Laundry</th>
                 <th>Sertifikat</th>
                 <th>QR Code</th>
-                <th>Absensi</th>
+                <th>Jabatan</th>
+                <th>Status</th>
             @endslot
 
             @slot('slotBody')
                 @foreach ($participants as $item)
-                    <tr class="search-items {{ $item->event->name }}">
-                        <td>
+                    <tr class="search-items {{ $item->type }}">
+                        <td class="w-20">
                             <span>{{ $item->event->name }}</span>
                         </td>
                         <td>
@@ -56,6 +57,9 @@
                         </td>
                         <td>
                             <span class="text-capitalize">{{ $item->type }}</span>
+                        </td>
+                        <td>
+                            <span class="text-capitalize">hadir</span>
                         </td>
                     </tr>
                 @endforeach

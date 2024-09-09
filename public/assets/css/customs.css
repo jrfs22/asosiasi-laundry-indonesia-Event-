@@ -475,18 +475,18 @@ footer img {
     line-height: normal;
 }
 
-.tickets p {
-    color: #000;
-    text-align: center;
-    font-family: var(--poppins);
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-}
-
 .tickets .detail {
     color: #000;
+    font-family: var(--poppins);
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-align: right;
+}
+
+.tickets .nama-acara {
+    color: #003D75;
     font-family: var(--poppins);
     font-size: 18px;
     font-style: normal;
@@ -662,6 +662,29 @@ footer img {
 
     .poster {
         display: inline-block;
+    }
+
+    .tickets h5 {
+        font-size: 35px;
+    }
+
+    .tickets .detail {
+        font-size: 16px;
+        text-align: center;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .tickets .row{
+        margin-top: 10px;
+        display: flex;
+    }
+
+    .tickets .qrcodes {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
     }
 }
 

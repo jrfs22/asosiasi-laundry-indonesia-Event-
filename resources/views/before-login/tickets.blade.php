@@ -22,13 +22,16 @@
             <p class="text-center">Selamat! tiket anda berhasil diproses</p>
         </div>
         <div class="row">
-            <div class="col-5">
-                <img id="qrcode" src="{{ asset('storage/qrcodes/' . $participant->qrcode) }}" alt="QR Code {{ $participant->name }}" width="214" height="214">
+            <div class="col-12 col-md-5">
+                <div class="qrcodes">
+                    <img id="qrcode" src="{{ asset('storage/qrcodes/' . $participant->qrcode) }}" alt="QR Code {{ $participant->name }}" width="214" height="214">
+                </div>
             </div>
-            <div class="col-7 detail">
+            <div class="col-12 col-md-7 detail">
+                <div class="nama-acara">Nama Acara: {{ $participant->event->name }}</div>
                 <div>Tanggal Pemesanan: {{ $participant->registration->created_at }}</div>
                 <div>Pemesanan atas nama: {{ $participant->registration->name }}</div>
-                <div>No HP: {{ $participant->name }}</div>
+                <div>No HP: {{ $participant->phone_number }}</div>
                 <div>Metode pembayaran: Transfer Rek BCA</div>
                 <div>Status pembayaran: <span class="text-uppercase" style="color: red">{{ $participant->registration->payment_status }}</span></div>
             </div>

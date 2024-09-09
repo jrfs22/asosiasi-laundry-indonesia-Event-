@@ -65,6 +65,7 @@
                                     <option value="facebook">Facebook</option>
                                     <option value="komunitas">Komunitas</option>
                                     <option value="brosur">Brosur</option>
+                                    <option value="lainnya">Lainnya</option>
                                 </x-forms.select>
                             </div>
                         </div>
@@ -119,7 +120,7 @@
                                                 placeholder="Adi laundry keren" required=0 readonly=1 />
                                         </div>
                                         <div class="col-md-7 mb-3">
-                                            <x-forms.input2 name="certificate[]" label="Nama pada sertifikat"
+                                            <x-forms.input2 name="certificate[]" label="Silahkan isi nama pada sertifikat"
                                                 placeholder="Adi laundry keren" />
                                         </div>
                                     </div>
@@ -467,7 +468,7 @@
         $('#phone_number').on('keyup', function() {
             var phoneNumber = $(this).val();
 
-            if (phoneNumber.length > 11) {
+            if (phoneNumber.length > 10) {
                 $.ajax({
                     url: '/member/' + phoneNumber,
                     type: 'GET',

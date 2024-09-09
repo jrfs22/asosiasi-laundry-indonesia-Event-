@@ -40,6 +40,8 @@ Route::middleware('guest')->group(function () {
 
 
 Route::middleware('auth')->group(function () {
+    Route::get('remove-cache', [QrCodeController::class, 'removeCache']);
+
     Route::prefix('events')->middleware('can:view events')->group(function () {
         Route::get('', [EventsController::class, 'index'])->name('events');
     });

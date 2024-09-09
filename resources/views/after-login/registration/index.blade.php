@@ -50,6 +50,7 @@
                         </td>
                         <td>
                             <div>
+                                <h6>Tiket: {{ $item->tickets }}</h6>
                                 <h6>Total: {{ idrFormat($item->amount) }}</h6>
                                 <span class="fs-3">
                                     Diskon: {{ idrFormat($item->discount_total) }}
