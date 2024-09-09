@@ -25,7 +25,7 @@ Route::middleware('guest')->group(function () {
 
 
     Route::prefix('tickets')->group(function () {
-        Route::get('', [RegistrationController::class, 'tickets'])->name('tickets');
+        Route::get('{name}/{participant_id}', [RegistrationController::class, 'tickets'])->name('tickets');
     });
 
     Route::prefix('registrasi')->group(function () {
@@ -50,6 +50,7 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('pendaftar')->middleware('can:view pendaftar')->group(function () {
         Route::get('', [RegistrationController::class, 'pendaftar'])->name('pendaftar');
+        Route::put('{id?}', [RegistrationController::class, 'update'])->name('pendaftar.update');
     });
 
     Route::prefix('absensi')->middleware('can:view absensi')->group(function () {

@@ -27,4 +27,9 @@ class ParticipantsModel extends Model
     {
         return $this->belongsTo(EventsModel::class);
     }
+
+    public function registration(): BelongsTo
+    {
+        return $this->belongsTo(RegistrationModel::class);
+    }
 }

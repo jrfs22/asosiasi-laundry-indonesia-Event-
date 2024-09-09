@@ -141,8 +141,8 @@ nav.navbar .company-name {
 }
 
 footer {
-    color: #484848;
-    text-align: end;
+    color: #003D75;
+    text-align: center;
     font-family: var(--poppins);
     font-size: 26px;
     font-style: normal;
@@ -454,6 +454,11 @@ footer img {
 .modal-backdrop {
     background-color: rebeccapurple;
 }
+/*
+.modal-backdrop {
+    backdrop-filter: blur(9px);
+    background: rgba(255, 255, 255, 0.2);
+} */
 
 .table-responsive {
     overflow-x: auto;
@@ -493,6 +498,33 @@ footer img {
     margin-top: 50px;
 }
 
+.w-20 {
+    max-width: 30%;
+    width: 30%;
+    text-wrap: wrap;
+}
+
+.dataTables_paginate {
+    padding-bottom: 30px;
+}
+
+.btn-verify {
+    color: #003D75;
+    font-size: 30px;
+}
+
+#btn-registrasi {
+    background-color: #20A9FB;
+    border-color: #20A9FB;
+}
+
+.poster {
+    display: none;
+    padding: 10px;
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
 @media (max-width: 576px) {
     .container-beranda {
         margin-right: 0;
@@ -518,16 +550,16 @@ footer img {
 
     nav.navbar .company-name {
         font-weight: 700;
-        font-size: 16px;
+        font-size: 20px;
     }
 
     .container-beranda .beranda .content {
-        margin-left: 20px;
+        margin-left: 30px;
         max-width: 75%;
     }
 
     .container-beranda .beranda h1{
-        font-size: 28px;
+        font-size: 33px;
         margin-top: 30px;
     }
 
@@ -553,16 +585,17 @@ footer img {
     }
 
     .hitung-mundur p.highlight {
-        font-size: 20px;
+        font-size: 18px;
+        color: #003D75;
     }
 
     .hitung-mundur .card span,
     .hitung-mundur .card.peserta span {
-        font-size: 20px;
+        font-size: 15px;
     }
 
     .hitung-mundur .card h5 {
-        font-size: 40px;
+        font-size: 25px;
     }
 
     .hitung-mundur .card.peserta {
@@ -570,7 +603,12 @@ footer img {
     }
 
     .hitung-mundur .card.peserta h5 {
-        font-size: 50px;
+        font-size: 30px;
+    }
+
+    .hitung-mundur .card {
+        margin-bottom: 10px;
+        border-radius: 10px;
     }
 
     footer {
@@ -621,6 +659,10 @@ footer img {
     .f1-buttons {
         font-size: 16px;
     }
+
+    .poster {
+        display: inline-block;
+    }
 }
 
 
@@ -628,5 +670,6 @@ footer img {
 @media (min-width: 576px) and (max-width: 767.98px) {
     body {
         font-size: 15px;
+        overflow-x: hidden!important;
     }
 }

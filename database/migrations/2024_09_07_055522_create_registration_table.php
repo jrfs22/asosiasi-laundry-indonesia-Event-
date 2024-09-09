@@ -25,7 +25,11 @@ return new class extends Migration
             $table->enum('member', [
                 'ya', 'tidak'
             ])->nullable();
-            $table->string('payment_status')->default('progress');
+            $table->enum('payment_status', [
+                'belum bayar',
+                'lunas'
+            ])->default('belum bayar');
+            $table->text('bukti_pembayaran')->default('bukti.jpg');
             $table->timestamps();
 
             $table->foreign('event_id')->references('id')->on('events');

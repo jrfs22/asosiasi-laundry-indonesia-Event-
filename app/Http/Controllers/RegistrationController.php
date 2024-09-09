@@ -33,14 +33,14 @@ class RegistrationController extends Controller
         ]);
     }
 
-    public function tickets()
+    public function tickets($name, $participant_id)
     {
-        return view('before-login.tickets');
+        $participant = ParticipantsModel::with('registration')->where(DB::raw("REPLACE(LOWER(name), ' ', '-')"), $name)->where('id', $participant_id)->first();
+        return view('before-login.tickets')->with('participant', $participant);
     }
 
     public function registrasi(Request $request)
     {
-        // dd($request->all());
         try {
             $validated = Validator::make($request->all(), [
                 'nameArr' => 'required|array',
@@ -132,6 +132,66 @@ class RegistrationController extends Controller
         }
     }
 
+    public function update(Request $request, $id)
+    {
+        try {
+            $validate = Validator::make($request->all(), [
+                'bukti_pembayaran' => 'required|image'
+            ], [
+                'bukti_pembayaran.required' => 'Bukti pembayaran tidak di masukkan',
+                'bukti_pembayaran.image' => 'File tidak berbentuk gambar'
+            ]);
+
+            DB::beginTransaction();
+
+            $registrasi = RegistrationModel::with('participants')->findOrFail($id);
+
+            if ($file = $request->file('bukti_pembayaran')) {
+                $filename = time(). '.' . $file->getClientOriginalExtension();
+
+                $path = $file->storeAs('bukti-pembayaran', $filename, 'public');
+
+                $registrasi->bukti_pembayaran = $path;
+                $registrasi->payment_status = 'lunas';
+
+                if ($registrasi->save()) {
+                    DB::commit();
+
+                    foreach ($registrasi->participants as $item) {
+                        $this->notification_konfirmasi(
+                            $item->name,
+                            route('tickets', [
+                                'name' => formatString($item->name),
+                                'participant_id' => $item->id
+                            ]),
+                            $item->phone_number,
+                        );
+                    }
+
+                    $this->alert(
+                        'Bukti pembayaran berhasil diinputkan',
+                        'System akan mengirimkan status',
+                        'success'
+                    );
+
+                    return redirect()->route('pendaftar');
+                }
+            }
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            $this->alert(
+                'Bukti pembayaran Gagal diinputkan',
+                $e->getMessage(),
+                'error'
+            );
+
+            Log::error($e->getMessage());
+
+            return redirect()->route('pendaftar');
+        }
+    }
+
     public function countAmount($isMember, $tickets)
     {
         $hargaDasar = $isMember['exists'] ? 200000 : 250000;
@@ -183,6 +243,50 @@ class RegistrationController extends Controller
         return $filename;
     }
 
+    public function notification_konfirmasi ($nama, $link, $target)
+    {
+        $token = env('WA_TOKEN');
+
+        $getPesan = 'Halo, ' . $nama .'
+
+Terima kasih telah menyelesaikan pendaftaran dan pembayaran tiket. Berikut adalah barcode pass masuk Anda yang akan digunakan pada saat acara:
+
+'. $link .'
+
+Harap simpan barcode ini dengan baik dan tunjukkan pada saat hari H di pintu masuk untuk memudahkan proses registrasi.
+
+Jika ada pertanyaan lebih lanjut, jangan ragu untuk menghubungi kami di WhatsApp ini.
+
+Sampai jumpa di acara nanti!
+
+Salam,
+*ASLI DPD RIAU*';
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://notificationwa.com/api/post',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => array(
+                'isi_pesan' => $getPesan,
+                'nomor_recieved' => $target
+            ),
+            CURLOPT_HTTPHEADER => array(
+                "Authorization: $token"
+            ),
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+    }
+
     public function notification(
         $nama, $member, $tiket, $harga, $subtotal,
         $diskon, $diskon_percentage, $final, $target
@@ -211,7 +315,7 @@ Bank BCA
 No. Rekening: *0343744665*
 A.n.: *Agustony Pangaribuan*
 
-Setelah melakukan pembayaran, harap kirimkan bukti transfer ke WhatsApp ini.
+*Note: Setelah melakukan pembayaran, harap kirimkan bukti transfer ke WhatsApp ini.*
 
 Informasi Penting:
 Barcode untuk pass masuk acara pada hari H akan dibagikan ke masing-masing nomor peserta yang sudah melakukan pendaftaran dan pembayaran. Pastikan nomor whatsapp Anda aktif dan dapat menerima pesan.

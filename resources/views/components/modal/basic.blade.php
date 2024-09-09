@@ -2,9 +2,9 @@
 
 <div class="modal fade" id="{{ $id }}" tabindex="-1" aria-labelledby="{{ $id }}Label"
     aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-admin modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <form action="{{ $action }}" method="POST">
+            <form action="{{ $action }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @if ($isUpdate)
                     @method('PUT')

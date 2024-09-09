@@ -19,10 +19,10 @@ class ParticipantsModelFactory extends Factory
         return [
             'name' => fake()->name(),
             'laundry_name' => fake()->name(),
-            'phone_number' => fake()->randomDigitNotZero(),
+            'phone_number' => '087893504595',
             'certificate_name' => fake()->name(),
             'type' => fake()->randomElement(['member', 'non member']),
-            'qrcode' => fake()->name(),
+            'qrcode' => 'josep-ronaldo-francis-siregar.svg',
         ];
     }
 }
