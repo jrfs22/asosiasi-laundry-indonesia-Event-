@@ -35,8 +35,19 @@ class RegistrationController extends Controller
 
     public function tickets($name, $participant_id)
     {
-        $participant = ParticipantsModel::with('registration')->where(DB::raw("REPLACE(LOWER(name), ' ', '-')"), $name)->where('id', $participant_id)->first();
-        return view('before-login.tickets')->with('participant', $participant);
+        $participant = ParticipantsModel::with(['registration', 'event'])->where(DB::raw("REPLACE(LOWER(name), ' ', '-')"), $name)->where('id', $participant_id)->first();
+
+        if ($participant) {
+            return view('before-login.tickets')->with('participant', $participant);
+        } else {
+            $this->alert(
+                'Detail pembayaran tidak ditemukan',
+                'Silahkan lakukan pembayaran terlebih dahulu',
+                'success'
+            );
+
+            return redirect()->route('beranda');
+        }
     }
 
     public function registrasi(Request $request)
@@ -79,6 +90,7 @@ class RegistrationController extends Controller
             $registration->discount_total = $rsAmount['totalDiskon'];
             $registration->member = $rsAmount['member'];
 
+            // dd($registration, $rsAmount);
             if ($registration->save()) {
 
                 for ($i = 0; $i < count($request->nameArr); $i++) {
@@ -92,9 +104,12 @@ class RegistrationController extends Controller
                         'type' => $this->isMember($request->phone_number_arr[$i])['exists'] ? 'member' : 'non member'
                     ]);
 
-                    $participant->qrcode = $this->generateQRCode($participant->id, $registration->id, $request->nameArr[$i]);
+                    // $participant->qrcode = $this->generateQRCode($participant->id, $registration->id, $request->nameArr[$i]);
                     $participant->save();
                 }
+
+
+                DB::commit();
 
                 $this->notification(
                     $registration->name,
@@ -107,8 +122,6 @@ class RegistrationController extends Controller
                     $registration->amount,
                     $registration->phone_number
                 );
-
-                DB::commit();
 
                 $this->alert(
                     'Registrasi Berhasil',
@@ -147,7 +160,7 @@ class RegistrationController extends Controller
             $registrasi = RegistrationModel::with('participants')->findOrFail($id);
 
             if ($file = $request->file('bukti_pembayaran')) {
-                $filename = time(). '.' . $file->getClientOriginalExtension();
+                $filename = time() . '.' . $file->getClientOriginalExtension();
 
                 $path = $file->storeAs('bukti-pembayaran', $filename, 'public');
 
@@ -166,6 +179,10 @@ class RegistrationController extends Controller
                             ]),
                             $item->phone_number,
                         );
+
+                        $item->qrcode = $this->generateQRCode($item->registration_id, $item->name);
+
+                        $item->save();
                     }
 
                     $this->alert(
@@ -195,7 +212,13 @@ class RegistrationController extends Controller
     public function countAmount($isMember, $tickets)
     {
         $hargaDasar = $isMember['exists'] ? 200000 : 250000;
-        $diskon = $isMember['member']->type === 'pengurus' ? 30 : (($tickets === 2) ? 20 : (($tickets === 3) ? 25 : ($tickets > 3 ? 30 : 0)));
+        $diskon = 0;
+
+        if ($isMember['exists']) {
+            $diskon = $isMember['member']->type === 'pengurus' ? 30 : (($tickets === 2) ? 20 : (($tickets === 3) ? 25 : ($tickets > 3 ? 30 : 0)));
+        } else {
+            $diskon = 0;
+        }
 
         $subtotal = $hargaDasar * $tickets;
         $totalDiskon = ($subtotal * $diskon) / 100;
@@ -226,10 +249,10 @@ class RegistrationController extends Controller
         }
     }
 
-    public function generateQRCode($participant_id, $registration_id, $name)
+    public function generateQRCode($registration_id, $name)
     {
-        $data = $participant_id . '/' . $registration_id;
-        $filename = formatString($name) . '.svg';
+        $data = formatString($name) . '/' . $registration_id;
+        $filename = formatString($name) . '-' . now() . '.svg';
 
         $directoryPath = public_path('storage/qrcodes');
         $filePath = $directoryPath . '/' . $filename;
@@ -243,15 +266,15 @@ class RegistrationController extends Controller
         return $filename;
     }
 
-    public function notification_konfirmasi ($nama, $link, $target)
+    public function notification_konfirmasi($nama, $link, $target)
     {
         $token = env('WA_TOKEN');
 
-        $getPesan = 'Halo, ' . $nama .'
+        $getPesan = 'Halo, ' . $nama . '
 
 Terima kasih telah menyelesaikan pendaftaran dan pembayaran tiket. Berikut adalah barcode pass masuk Anda yang akan digunakan pada saat acara:
 
-'. $link .'
+' . $link . '
 
 Harap simpan barcode ini dengan baik dan tunjukkan pada saat hari H di pintu masuk untuk memudahkan proses registrasi.
 
@@ -288,26 +311,32 @@ Salam,
     }
 
     public function notification(
-        $nama, $member, $tiket, $harga, $subtotal,
-        $diskon, $diskon_percentage, $final, $target
-    )
-    {
+        $nama,
+        $member,
+        $tiket,
+        $harga,
+        $subtotal,
+        $diskon,
+        $diskon_percentage,
+        $final,
+        $target
+    ) {
         $token = env('WA_TOKEN');
 
         $getPesan = '*E-INVOICE PEMESANAN TIKET*
 
 Terima kasih telah melakukan pemesanan. Berikut adalah rincian transaksi Anda:
 
-Tanggal Transaksi : *'. now() .'*
-Pemesan : *'.$nama.'*
-Member : *'.$member.'*
+Tanggal Transaksi : *' . now() . '*
+Pemesan : *' . $nama . '*
+Member : *' . $member . '*
 
-Harga per Tiket : *'.$tiket.'*
-Harga : *'. idrFormat($harga) .'*
-Subtotal : *'. idrFormat($subtotal) .'*
-Diskon ('. $diskon_percentage .'%): *'. idrFormat($diskon) .'*
+Harga per Tiket : *' . $tiket . '*
+Harga : *' . idrFormat($harga) . '*
+Subtotal : *' . idrFormat($subtotal) . '*
+Diskon (' . $diskon_percentage . '%): *' . idrFormat($diskon) . '*
 
-Total Pembayaran : *'. idrFormat($final) .'*
+Total Pembayaran : *' . idrFormat($final) . '*
 
 Silakan lakukan pembayaran ke rekening berikut:
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Artisan;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class QrCodeController extends Controller
@@ -20,6 +21,17 @@ class QrCodeController extends Controller
         QrCode::format('svg')->size(300)->generate('https://example.com', $filePath);
 
         return 'QR code saved successfully!';
+    }
+
+    public function removeCache()
+    {
+        Artisan::call('cache:clear');
+        Artisan::call('config:clear');
+        Artisan::call('route:clear');
+        Artisan::call('view:clear');
+        Artisan::call('event:clear');
+
+        return 'Successfully!';
     }
 
     public function whatsapp()

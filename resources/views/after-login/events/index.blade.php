@@ -20,7 +20,7 @@
     <div class="card card-body">
         <x-table.basic>
             @slot('slotHead')
-                <th>Event</th>
+                <th class="w-20">Event</th>
                 <th>Poster</th>
                 <th>Tanggal</th>
                 <th>Waktu</th>
@@ -31,7 +31,7 @@
             @slot('slotBody')
                 @foreach ($events as $item)
                     <tr class="search-items">
-                        <td>
+                        <td  class="w-20">
                             <span>{{ $item->name }}</span>
                         </td>
                         <td>

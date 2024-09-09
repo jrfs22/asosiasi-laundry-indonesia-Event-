@@ -87,7 +87,7 @@
         </div>
 
         <div class="card poster">
-            <img src="{{ asset('assets/images/posters/penanganan-laundry-satuan.jpeg') }}" alt="Poster acara" width="100%">
+            <img src="{{ asset('assets/images/posters/poster-2.jpg') }}" alt="Poster acara" width="100%">
         </div>
 
         <footer>
@@ -95,21 +95,6 @@
             <img src="{{ asset('assets/images/logo/zalamobile.png') }}" alt="Logo zala mobile">
         </footer>
     </div>
-
-    <div class="modal fade" id="showPoster" tabindex="-1" aria-labelledby="showPosterLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <div class="container-btn">
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <img src="{{ asset('assets/images/penanganan-laundry-satuan.jpeg') }}" width="100%"
-                        alt="Poster Workshop">
-                </div>
-            </div>
-        </div>
-    </div>
-
 @endsection
 
 @push('scripts')
@@ -120,12 +105,7 @@
             $("#btn-registrasi").addClass('disabled');
         }
 
-
         document.addEventListener('DOMContentLoaded', function() {
-            // $('#showPoster').modal('show');
-            // setTimeout(function() {
-            //     $('#showPoster').modal('hide');
-            // }, 3000);
             var countDownDate = new Date("Sep 28, 2024 00:00:00").getTime();
 
             var countdownFunction = setInterval(function() {
@@ -138,13 +118,11 @@
                 var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                 var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-                // Output the result in the elements with respective IDs
                 $("#days").text(days)
                 $("#hours").text(hours)
                 $("#minutes").text(minutes)
                 $("#seconds").text(seconds)
 
-                // If the count down is over, write some text
                 if (distance < 0) {
                     clearInterval(countdownFunction);
                     $("#days").text("0")

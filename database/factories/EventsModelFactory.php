@@ -22,7 +22,7 @@ class EventsModelFactory extends Factory
             'date' => now(),
             'start_time' => '10:00:00',
             'end_time' => '12:00:00',
-            'max_participants' => 50,
+            'max_participants' => 70,
             'status' => fake()->randomElement(['selesai', 'sedang berjalan'])
         ];
     }

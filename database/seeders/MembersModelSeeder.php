@@ -122,6 +122,8 @@ class MembersModelSeeder extends Seeder
             ['name' => 'Afandi', 'phone_number' => '085363416631', 'type' => 'member'],
             ['name' => 'Hanifa Amrina', 'phone_number' => '085264120526', 'type' => 'member'],
             ['name' => 'Deddi Saputra', 'phone_number' => '081375495565', 'type' => 'pengurus'],
+            ['name' => 'Rahmayanti', 'phone_number' => '082285487494', 'type' => 'pengurus'],
+            ['name' => 'Rayhan Syauki Valiandra', 'phone_number' => '082287686551', 'type' => 'pengurus'],
         ]);
     }
 }
