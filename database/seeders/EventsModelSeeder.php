@@ -14,10 +14,11 @@ class EventsModelSeeder extends Seeder
      */
     public function run(): void
     {
-        foreach (User::all() as $user) {
+        // foreach (User::all() as $user) {
+        $user = User::inRandomOrder()->first();
             EventsModel::factory()->count(1)->state([
                 'user_id' => $user->id
             ])->create();
-        }
+        // }
     }
 }

@@ -141,7 +141,7 @@
                     <fieldset>
                         <div class="payment">
                             <h5>Pemesanan</h5>
-                            <p class="subtitle">{{ idnDate(now()) }}</p>
+                            <p class="subtitle">{{ now() }}</p>
                             <div class="table-responsive mb-4 border rounded-1">
                                 <table class="table text-nowrap mb-0 align-middle">
                                     <thead>
@@ -267,7 +267,7 @@
 
                 // validasi form
                 parent_fieldset.find('input[type="text"], input[type="password"], textarea, select').not(
-                    '[name="laundry_arr[]"]').each(function() {
+                    '[name="laundry_arr[]"], [name="email"]').each(function() {
                     if ($(this).val() == "") {
                         $(this).addClass('input-error');
                         next_step = false;
@@ -305,7 +305,7 @@
 
             $('.f1').on('submit', function(e) {
                 $(this).find('input[type="text"], input[type="password"], textarea, select').not(
-                    '[name="laundry_arr[]"]').each(
+                    '[name="laundry_arr[]"], [name="email"]').each(
                     function() {
                         if ($(this).val() == "") {
                             e.preventDefault();
@@ -423,7 +423,7 @@
                     <input type="text" class="form-control" id="laundry_arr[]" name="laundry_arr[]" placeholder="Adi laundry">
                 </div>
                 <div class="col-md-7 mb-3">
-                    <label class="form-label" for="certificate[]"> Nama pada sertifikat <span class="text-danger">*</span></label>
+                    <label class="form-label" for="certificate[]"> Silahkan isi nama pada sertifikat <span class="text-danger">*</span></label>
                     <input type="text" class="form-control required" id="certificate[]" name="certificate[]" placeholder="Adi laundry keren">
                 </div>
             </div>`;

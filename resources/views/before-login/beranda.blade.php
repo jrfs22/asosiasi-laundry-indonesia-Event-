@@ -19,14 +19,13 @@
                     height="122">
 
                 <div class="company-name">
-                    Asosiasi
-                    Laundry
-                    Indonesia
+                    ASLI <br>
+                    DPD RIAU
                 </div>
             </a>
         </nav>
 
-        <section class="beranda">
+        <div class="beranda">
             <div class="row">
                 <div class="col-12 col-md-5 left animate__animated animate__fadeInLeft">
                     <div class="content">
@@ -41,51 +40,55 @@
                         </p>
                     </div>
                 </div>
-                <div class="col-12 col-md-7 right animate__animated animate__fadeInRight">
+                <div class="col-12 col-md-7 right animate__animated animate__fadeInRight overflow-hidden">
                     <div class="hitung-mundur">
                         <p class="highlight">Hitung Mundur Acara:</p>
-                        <div class="row">
-                            <div class="col-6 col-md-6 col-lg-3">
+                        <div class="row gx-2 gx-sm-3 gx-md-4">
+                            <div class="col-3 col-md-6 col-lg-3 h-100">
                                 <div class="card">
                                     <span>Hari</span>
                                     <h5 id="days">48</h5>
                                 </div>
                             </div>
-                            <div class="col-6 col-md-6 col-lg-3">
+                            <div class="col-3 col-md-6 col-lg-3 h-100">
                                 <div class="card">
                                     <span>Jam</span>
                                     <h5 id="hours">48</h5>
                                 </div>
                             </div>
-                            <div class="col-6 col-md-6 col-lg-3">
+                            <div class="col-3 col-md-6 col-lg-3 h-100">
                                 <div class="card">
                                     <span>Menit</span>
                                     <h5 id="minutes">48</h5>
                                 </div>
                             </div>
-                            <div class="col-6 col-md-6 col-lg-3">
+                            <div class="col-3 col-md-6 col-lg-3 h-100">
                                 <div class="card">
                                     <span>Detik</span>
                                     <h5 id="seconds">48</h5>
                                 </div>
                             </div>
-                            <div class="col-12 col-md-6">
+                            <div class="col-6 col-md-6">
                                 <div class="card peserta">
                                     <span>PENDAFTAR</span>
                                     <h5>{{ $event->summary }}</h5>
                                 </div>
                             </div>
-                            <div class="col-12 col-md-6">
+                            <div class="col-6 col-md-6">
                                 <div class="card peserta">
                                     <span>TERSEDIA</span>
-                                    <h5>{{ ($event->max_participants - $event->summary) }}</h5>
+                                    <h5>{{ $event->max_participants - $event->summary }}</h5>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+
+        <div class="card poster">
+            <img src="{{ asset('assets/images/posters/penanganan-laundry-satuan.jpeg') }}" alt="Poster acara" width="100%">
+        </div>
 
         <footer>
             Powered by
@@ -113,19 +116,17 @@
     <script>
         var gap = {!! $event->max_participants - $event->summary !!}
 
-
-        if(gap === 0) {
+        if (gap === 0) {
             $("#btn-registrasi").addClass('disabled');
         }
 
+
         document.addEventListener('DOMContentLoaded', function() {
-            $('#showPoster').modal('show');
-
-            setTimeout(function() {
-                $('#showPoster').modal('hide');
-            }, 3000);
-
-            var countDownDate = new Date("Sep 25, 2024 00:00:00").getTime();
+            // $('#showPoster').modal('show');
+            // setTimeout(function() {
+            //     $('#showPoster').modal('hide');
+            // }, 3000);
+            var countDownDate = new Date("Sep 28, 2024 00:00:00").getTime();
 
             var countdownFunction = setInterval(function() {
                 var now = new Date().getTime();
@@ -153,6 +154,8 @@
                     $("#btn-registrasi").addClass('disabled');
                 }
             }, 1000);
+
+
         });
     </script>
 @endpush
