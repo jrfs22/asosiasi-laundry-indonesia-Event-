@@ -30,6 +30,7 @@ class QrCodeController extends Controller
         Artisan::call('route:clear');
         Artisan::call('view:clear');
         Artisan::call('event:clear');
+        Artisan::call('optimize:clear ');
 
         return 'Successfully!';
     }

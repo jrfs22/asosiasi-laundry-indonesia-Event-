@@ -70,7 +70,7 @@
                             </div>
                         </div>
                         <div class="f1-buttons">
-                            <button type="button" class="btn btn-primary btn-next w-100">Selanjutnya <i
+                            <button type="button" class="btn btn-primary btn-next w-100" id="btnFirst">Selanjutnya <i
                                     class="fa fa-arrow-right"></i></button>
                         </div>
                     </fieldset>
@@ -120,8 +120,8 @@
                                                 placeholder="Adi laundry keren" required=0 readonly=1 />
                                         </div>
                                         <div class="col-md-7 mb-3">
-                                            <x-forms.input2 name="certificate[]" label="Silahkan isi nama pada sertifikat"
-                                                placeholder="Adi laundry keren" />
+                                            <x-forms.input2 name="certificate[]" label="Nama pada sertifikat"
+                                                placeholder="Silahkan isi nama pada sertifikat" />
                                         </div>
                                     </div>
                                 </div>
@@ -181,11 +181,13 @@
                                 <h5>Tujuan Pembayaran</h5>
                                 <p class="subtitle">Metode Pembayaran</p>
                                 <div class="bank">
-                                    <span>Bank BCA</span>
+                                    <span>Bank BCA</span> <br>
+                                    <span>A.n Agustony Pangaribuan
+                                    </span>
                                     <div class="row">
-                                        <div class="col-6">1751668451</div>
+                                        <div class="col-6">0343744665</div>
                                         <div class="col-6 text-end">
-                                            <a id="copy-bank-account" data-copy="1751668451">
+                                            <a id="copy-bank-account" data-copy="0343744665">
                                                 Salin <i class="fa fa-copy"></i>
                                             </a>
                                         </div>
@@ -346,9 +348,11 @@
                             input.val(currentVal - 1).change();
                             $('.repeater-container .repeater-form:last').remove();
 
+                            $("#checkTotal").attr('disabled', false);
+
                             ticket -= 1;
-                            console.log(ticket);
                         }
+
                         if (parseInt(input.val()) == input.attr('min')) {
                             $(this).attr('disabled', true);
                         }
@@ -357,7 +361,6 @@
                             input.val(currentVal + 1).change();
                             addRepeaterForm(currentVal + 1);
                             ticket += 1;
-                            console.log(ticket);
 
                         }
                         if (parseInt(input.val()) == input.attr('max')) {
@@ -424,8 +427,8 @@
                     <input type="text" class="form-control" id="laundry_arr[]" name="laundry_arr[]" placeholder="Adi laundry">
                 </div>
                 <div class="col-md-7 mb-3">
-                    <label class="form-label" for="certificate[]"> Silahkan isi nama pada sertifikat <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control required" id="certificate[]" name="certificate[]" placeholder="Adi laundry keren">
+                    <label class="form-label" for="certificate[]"> Nama pada sertifikat <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control required" id="certificate[]" name="certificate[]" placeholder="Silahkan isi nama pada sertifikat">
                 </div>
             </div>`;
 
@@ -476,34 +479,45 @@
                         _token: $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function(response) {
-                        if (response.exists) {
-                            $('#member-container').empty();
-
-                            if (response.member.type === 'pengurus') {
-                                isPengurus = true;
-                            }
-
-
-                            isMember = 'Ya'
-                            $('#tbl_isMember').text(isMember);
+                        if (response.registered) {
+                            Swal.fire({
+                                title: "Perhatian",
+                                text: "Kami mendeteksi bahwasan nya anda sudah terdaftar",
+                                icon: "error"
+                            });
+                            $("#btnFirst").attr('disabled', true);
                         } else {
-                            if ($('#member-container').find('select').length === 0) {
-                                $('#member-container').append(`
-                                    <div class="col-md-12 mb-3">
-                                        <label class="form-label" for="member">Apakah anda tertarik untuk bergabung dengan ASLI?
-                                            <span class="text-danger">*</span>
-                                        </label>
-                                        <select class="form-select" id="member" name="member" required>
-                                            <option value="">Pilih disini</option>
-                                            <option value="ya">Ya</option>
-                                            <option value="tidak">Tidak</option>
-                                        </select>
-                                    </div>
-                                `);
-                            }
+                            $("#btnFirst").attr('disabled', false);
+                            if (response.exists) {
+                                $('#member-container').empty();
+                                isMember = 'Ya'
 
-                            isMember = 'Tidak'
-                            $('#tbl_isMember').text(isMember);
+                                if (response.member.type === 'pengurus' || response.member.type === 'panitia') {
+                                    isPengurus = true;
+                                } else {
+                                    isPengurus = false;
+                                }
+
+                                $('#tbl_isMember').text(isMember);
+                            } else {
+                                if ($('#member-container').find('select').length === 0) {
+                                    $('#member-container').append(`
+                                        <div class="col-md-12 mb-3">
+                                            <label class="form-label" for="member">Apakah anda tertarik untuk bergabung dengan ASLI?
+                                                <span class="text-danger">*</span>
+                                            </label>
+                                            <select class="form-select" id="member" name="member" required>
+                                                <option value="">Pilih disini</option>
+                                                <option value="ya">Ya</option>
+                                                <option value="tidak">Tidak</option>
+                                            </select>
+                                        </div>
+                                    `);
+                                }
+
+                                isMember = 'Tidak'
+                                $('#tbl_isMember').text(isMember);
+                            }
                         }
                     },
                     error: function() {
@@ -525,18 +539,32 @@
                         _token: $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function(response) {
-                        if (response.exists) {
-
+                        if (response.registered) {
                             Swal.fire({
-                                title: "Member berlebihan terdeteksi",
-                                text: "Maksimal hanya 1 member dalam registrasi",
+                                title: "Perhatian",
+                                text: "Kami mendeteksi bahwasan nya anda sudah terdaftar",
                                 icon: "error"
                             });
-
-                            inputField.addClass('input-error');
+                            $("#checkTotal").attr('disabled', true);
                         } else {
-                            inputField.removeClass('input-error');
+                            $("#checkTotal").attr('disabled', false);
+                            if (response.exists) {
+                                Swal.fire({
+                                    title: "Member berlebihan terdeteksi",
+                                    text: "Maksimal hanya 1 member dalam registrasi",
+                                    icon: "error"
+                                });
+
+                                $("#checkTotal").attr('disabled', true);
+
+                                inputField.addClass('input-error');
+                            } else {
+                                $("#checkTotal").attr('disabled', false);
+
+                                inputField.removeClass('input-error');
+                            }
                         }
+
                     },
                     error: function() {
                         alert('Terjadi kesalahan saat memeriksa nomor telepon.');
@@ -551,7 +579,6 @@
                 currency: 'IDR'
             });
 
-            // Format the amount and return it
             return formatter.format(amount);
         }
 

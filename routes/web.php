@@ -52,11 +52,16 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('pendaftar')->middleware('can:view pendaftar')->group(function () {
         Route::get('', [RegistrationController::class, 'pendaftar'])->name('pendaftar');
+
         Route::put('{id?}', [RegistrationController::class, 'update'])->name('pendaftar.update');
+
+        Route::get('reminder-pembayaran', [RegistrationController::class, 'sendReminderPembayaran'])->name('pendaftar.reminder-pembayaran');
     });
 
-    Route::prefix('absensi')->middleware('can:view absensi')->group(function () {
-        Route::get('', [ParticipantsController::class, 'absensi'])->name('absensi');
+    Route::prefix('peserta')->middleware('can:view absensi')->group(function () {
+        Route::get('', [ParticipantsController::class, 'peserta'])->name('peserta');
+
+        Route::get('reminder-acara', [ParticipantsController::class, 'sendReminderAcara'])->name('pendaftar.reminder-acara');
     });
 
 

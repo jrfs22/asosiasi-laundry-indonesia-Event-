@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\membersModel;
+use App\Models\MembersModel;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -13,22 +13,7 @@ class MembersModelSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::insert([
-        //     [
-        //         'name' => 'Admin amin',
-        //         'email' => 'amin@admin.com',
-        //         'password' => Hash::make('123'),
-        //         'role' => 'admin'
-        //     ],
-        //     [
-        //         'name' => 'User Amin',
-        //         'email' => 'amin@user.com',
-        //         'password' => Hash::make('123'),
-        //         'role' => 'user'
-        //     ],
-        // ]);
-
-        membersModel::insert([
+        MembersModel::insert([
             [
                 'name' => 'Josep Ronaldo Francis Siregar',
                 'phone_number' => '087893504595',
@@ -69,7 +54,7 @@ class MembersModelSeeder extends Seeder
             ['name' => 'Muhammad Irsyad', 'phone_number' => '08117547776', 'type' => 'pengurus'],
             ['name' => 'Ira Satria', 'phone_number' => '081275940954', 'type' => 'member'],
             ['name' => 'Sonny Rianando', 'phone_number' => '085228020551', 'type' => 'pengurus'],
-            ['name' => 'Dori Andelo', 'phone_number' => '85278360021', 'type' => 'panitia'],
+            ['name' => 'Dori Andelo', 'phone_number' => '085278360021', 'type' => 'panitia'],
             ['name' => 'Riki Rahman', 'phone_number' => '085355008500', 'type' => 'member'],
             ['name' => 'Rahmat Kurniawan', 'phone_number' => '081374763636', 'type' => 'pengurus'],
             ['name' => 'Nopri Sandra', 'phone_number' => '082381604805', 'type' => 'member'],
@@ -99,31 +84,20 @@ class MembersModelSeeder extends Seeder
             ['name' => 'Fatmawati', 'phone_number' => '08127572150', 'type' => 'member'],
             ['name' => 'Yandri Endo Mahata', 'phone_number' => '08111931267', 'type' => 'member'],
             ['name' => 'Said Abdul Rahim', 'phone_number' => '081261717772', 'type' => 'panitia'],
-            ['name' => 'Lia Roza Alpanaliza', 'phone_number' => '081375014409', 'type' => 'member'],
-            ['name' => 'melati riyanda', 'phone_number' => '085272494723', 'type' => 'member'],
-            ['name' => 'melisa ningsih', 'phone_number' => '081364987234', 'type' => 'member'],
-            ['name' => 'windi astuti', 'phone_number' => '085278702999', 'type' => 'member'],
-            ['name' => 'eni yuniarti', 'phone_number' => '082384567012', 'type' => 'member'],
-            ['name' => 'Putri Dian Sari', 'phone_number' => '085372434696', 'type' => 'member'],
-            ['name' => 'Maradona', 'phone_number' => '081370777275', 'type' => 'member'],
-            ['name' => 'wanda susanti', 'phone_number' => '081370437356', 'type' => 'member'],
-            ['name' => 'Martias Satria', 'phone_number' => '082385447070', 'type' => 'member'],
-            ['name' => 'mega sari', 'phone_number' => '085365331178', 'type' => 'member'],
-            ['name' => 'Nurhidayati', 'phone_number' => '082281832669', 'type' => 'member'],
-            ['name' => 'vita febriani', 'phone_number' => '085278699006', 'type' => 'member'],
-            ['name' => 'Kartika Sari', 'phone_number' => '081266068792', 'type' => 'member'],
-            ['name' => 'Tursinah', 'phone_number' => '081261577762', 'type' => 'member'],
-            ['name' => 'Anisa Nur Hikmah', 'phone_number' => '085228281820', 'type' => 'member'],
-            ['name' => 'Lastri Sundari', 'phone_number' => '082389246320', 'type' => 'member'],
-            ['name' => 'Indri Mastika', 'phone_number' => '081374534344', 'type' => 'member'],
-            ['name' => 'Asmita', 'phone_number' => '081262677990', 'type' => 'member'],
-            ['name' => 'fitriyeni', 'phone_number' => '081261707774', 'type' => 'member'],
-            ['name' => 'Maylia', 'phone_number' => '081267252244', 'type' => 'member'],
-            ['name' => 'Afandi', 'phone_number' => '085363416631', 'type' => 'member'],
-            ['name' => 'Hanifa Amrina', 'phone_number' => '085264120526', 'type' => 'member'],
-            ['name' => 'Deddi Saputra', 'phone_number' => '081375495565', 'type' => 'pengurus'],
-            ['name' => 'Rahmayanti', 'phone_number' => '082285487494', 'type' => 'pengurus'],
+            ['name' => 'Lia Roza', 'phone_number' => '082176767755', 'type' => 'member'],
+            ['name' => 'Nurhidayati', 'phone_number' => '082284700984', 'type' => 'member'],
+            ['name' => 'Dessi Rahmawati', 'phone_number' => '082210106006', 'type' => 'member'],
+            ['name' => 'Suhendra Ramadhan', 'phone_number' => '082172828282', 'type' => 'member'],
+            ['name' => 'Loli Trisna Wati', 'phone_number' => '082285067001', 'type' => 'member'],
+            ['name' => 'Yuliana Idha', 'phone_number' => '082288089599', 'type' => 'member'],
             ['name' => 'Rayhan Syauki Valiandra', 'phone_number' => '082287686551', 'type' => 'pengurus'],
+            ['name' => 'Sahril', 'phone_number' => '081356173423', 'type' => 'member'],
+            ['name' => 'Asih', 'phone_number' => '082269009804', 'type' => 'member'],
+            ['name' => 'Rizka Ade Irma', 'phone_number' => '082172567644', 'type' => 'member'],
+            ['name' => 'Enik Vidianti', 'phone_number' => '082173552111', 'type' => 'member'],
+            ['name' => 'Sulisna', 'phone_number' => '082386132840', 'type' => 'member'],
+            ['name' => 'Suherman', 'phone_number' => '082171099900', 'type' => 'member'],
+            ['name' => 'Ramayanti', 'phone_number' => '082285487494', 'type' => 'member'],
         ]);
     }
 }

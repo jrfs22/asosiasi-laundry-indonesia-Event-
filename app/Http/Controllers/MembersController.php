@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\MembersModel;
+use App\Models\ParticipantsModel;
+use App\Models\RegistrationModel;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -18,11 +20,15 @@ class MembersController extends Controller
     {
         try {
             $member = MembersModel::where('phone_number', $phone_number)->first();
+
+            $isRegistered = ParticipantsModel::where('phone_number', $phone_number)->exists();
+
             $exists = !is_null($member);
 
             return response()->json([
                 'exists' => $exists,
-                'member' => $member
+                'member' => $member,
+                'registered' => $isRegistered
             ]);
         } catch (Exception $e) {
             return false;
