@@ -71,13 +71,13 @@
                             <div class="col-6 col-md-6">
                                 <div class="card peserta">
                                     <span>PENDAFTAR</span>
-                                    <h5>{{ $event->summary }}</h5>
+                                    <h5>{{ ($event->summary + 0) }}</h5>
                                 </div>
                             </div>
                             <div class="col-6 col-md-6">
                                 <div class="card peserta">
                                     <span>TERSEDIA</span>
-                                    <h5>{{ $event->max_participants - $event->summary }}</h5>
+                                    <h5>{{ ($event->max_participants - $event->summary - 0) }}</h5>
                                 </div>
                             </div>
                         </div>
@@ -87,7 +87,7 @@
         </div>
 
         <div class="card poster">
-            <img src="{{ asset('assets/images/posters/poster-2.jpg') }}" alt="Poster acara" width="100%">
+            <img src="{{ asset('assets/images/posters/revisi-terakhir.jpg') }}" alt="Poster acara" width="100%">
         </div>
 
         <footer>
@@ -106,7 +106,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            var countDownDate = new Date("Sep 28, 2024 00:00:00").getTime();
+            var countDownDate = new Date("Sep 28, 2024 08:00:00").getTime();
 
             var countdownFunction = setInterval(function() {
                 var now = new Date().getTime();

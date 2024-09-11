@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Traits\NotificationTraits;
 use Event;
 use Exception;
 use App\Models\EventsModel;
@@ -17,6 +18,7 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class RegistrationController extends Controller
 {
+    use NotificationTraits;
     public function index()
     {
         return view('before-login.registration');
@@ -27,9 +29,26 @@ class RegistrationController extends Controller
         $events = EventsModel::all();
         $pendaftar = RegistrationModel::with('event')->get();
 
+        $tickets = [
+            'totalPaid' => 0,
+            'totalUnpaid' => 0,
+            'totalSettled' => 0,
+            'totalPending' => 0
+        ];
+
+        if ($pendaftar) {
+            $tickets['totalUnpaid'] = $pendaftar->where('payment_status', 'belum bayar')->count();
+            $tickets['totalPaid'] = $pendaftar->where('payment_status', 'lunas')->count();
+
+            $tickets['totalSettled'] = $pendaftar->where('payment_status', 'lunas')->sum('amount');
+            $tickets['totalPending'] = $pendaftar->where('payment_status', 'belum bayar')->sum('amount');
+
+        }
+
         return view('after-login.registration.index')->with([
             'pendaftar' => $pendaftar,
-            'events' => $events
+            'events' => $events,
+            'tickets' => $tickets
         ]);
     }
 
@@ -63,74 +82,86 @@ class RegistrationController extends Controller
                 'laundry' => 'required',
                 'source' => 'required',
                 'member' => 'sometimes',
-                'event_id'
             ]);
 
             DB::beginTransaction();
-            $event = EventsModel::latest()->first();
 
-            $registration = new RegistrationModel();
-            $registration->event_id = $event->id;
-            $registration->name = $request->name;
-            if ($request->has('email')) {
-                $registration->email = $request->email;
-            }
-            $registration->phone_number = $request->phone_number;
-
-            $registration->tickets = count($request->nameArr);
-            $registration->source = $request->source;
-
-            $rsAmount = $this->countAmount(
-                $this->isMember($request->phone_number),
-                count($request->nameArr)
-            );
-
-            $registration->amount = $rsAmount['amount'];
-            $registration->discount_percentage = $rsAmount['diskon'];
-            $registration->discount_total = $rsAmount['totalDiskon'];
-            $registration->member = $rsAmount['member'];
-
-            // dd($registration, $rsAmount);
-            if ($registration->save()) {
-
-                for ($i = 0; $i < count($request->nameArr); $i++) {
-                    $participant = ParticipantsModel::create([
-                        'event_id' => $event->id,
-                        'registration_id' => $registration->id,
-                        'name' => $request->nameArr[$i],
-                        'laundry_name' => $request->laundry_arr[$i],
-                        'phone_number' => $request->phone_number_arr[$i],
-                        'certificate_name' => $request->certificate[$i],
-                        'type' => $this->isMember($request->phone_number_arr[$i])['exists'] ? 'member' : 'non member'
-                    ]);
-
-                    // $participant->qrcode = $this->generateQRCode($participant->id, $registration->id, $request->nameArr[$i]);
-                    $participant->save();
+            $counter = 0;
+            foreach ($request->phone_number_arr as $value) {
+                if (MembersModel::where('phone_number', $value)->exists()) {
+                    $counter++;
                 }
+            }
 
-
-                DB::commit();
-
-                $this->notification(
-                    $registration->name,
-                    $registration->member,
-                    $registration->tickets,
-                    $rsAmount['hargaDasar'],
-                    $rsAmount['subtotal'],
-                    $registration->discount_total,
-                    $registration->discount_percentage,
-                    $registration->amount,
-                    $registration->phone_number
-                );
-
+            if ($counter > 1) {
                 $this->alert(
-                    'Registrasi Berhasil',
-                    'Registrasi berhasil & silahkan cek whatsapp anda untuk melanjutkan pembayaran',
-                    'success'
+                    'Registrasi Gagal',
+                    'Terdapat lebih dari 1 member',
+                    'error'
                 );
 
                 return redirect()->route('registrasi');
+            } else {
+                $event = EventsModel::latest()->first();
+
+                $registration = new RegistrationModel();
+                $registration->event_id = $event->id;
+                $registration->name = $request->name;
+                if ($request->has('email')) {
+                    $registration->email = $request->email;
+                }
+                $registration->phone_number = $request->phone_number;
+
+                $registration->tickets = count($request->nameArr);
+                $registration->source = $request->source;
+
+                $rsAmount = $this->countAmount(
+                    $this->isMember($request->phone_number),
+                    count($request->nameArr)
+                );
+
+                $registration->amount = $rsAmount['amount'];
+                $registration->discount_percentage = $rsAmount['diskon'];
+                $registration->discount_total = $rsAmount['totalDiskon'];
+                $registration->member = $rsAmount['member'];
+
+                if ($registration->save()) {
+                    for ($i = 0; $i < count($request->nameArr); $i++) {
+                        ParticipantsModel::create([
+                            'event_id' => $event->id,
+                            'registration_id' => $registration->id,
+                            'name' => $request->nameArr[$i],
+                            'laundry_name' => $request->laundry_arr[$i],
+                            'phone_number' => $request->phone_number_arr[$i],
+                            'certificate_name' => $request->certificate[$i],
+                            'type' => $this->isMember($request->phone_number_arr[$i])['exists'] ? 'member' : 'non member'
+                        ]);
+                    }
+
+                    DB::commit();
+
+                    $this->notification(
+                        $registration->name,
+                        $registration->member,
+                        $registration->tickets,
+                        $rsAmount['hargaDasar'],
+                        $rsAmount['subtotal'],
+                        $registration->discount_total,
+                        $registration->discount_percentage,
+                        $registration->amount,
+                        $registration->phone_number
+                    );
+
+                    $this->alert(
+                        'Registrasi Berhasil',
+                        'Registrasi berhasil & silahkan cek whatsapp anda untuk melanjutkan pembayaran',
+                        'success'
+                    );
+
+                    return redirect()->route('registrasi');
+                }
             }
+
         } catch (Exception $e) {
             DB::rollBack();
             $this->alert(
@@ -183,6 +214,9 @@ class RegistrationController extends Controller
                         $item->qrcode = $this->generateQRCode($item->registration_id, $item->name);
 
                         $item->save();
+
+                        $randomSeconds = rand(1, 5);
+                        sleep($randomSeconds);
                     }
 
                     $this->alert(
@@ -209,13 +243,44 @@ class RegistrationController extends Controller
         }
     }
 
+    public function sendReminderPembayaran()
+    {
+        try {
+            $register = RegistrationModel::where('payment_status', operator: 'belum bayar')->get();
+
+            foreach ($register as $item) {
+                $this->sendNotifikasiReminderPembayaran($item->name, $item->tickets, $item->amount, $item->phone_number);
+
+                sleep(rand(1, 10));
+            }
+
+            $this->alert(
+                'Reminder berhasil dikirimkan',
+                'System akan mengirimkan segera',
+                'success'
+            );
+
+            return redirect()->route('pendaftar');
+        } catch (Exception $e) {
+            $this->alert(
+                'Gagal melakukan reminder',
+                $e->getMessage(),
+                'error'
+            );
+
+            Log::error($e->getMessage());
+
+            return redirect()->route('pendaftar');
+        }
+    }
+
     public function countAmount($isMember, $tickets)
     {
         $hargaDasar = $isMember['exists'] ? 200000 : 250000;
         $diskon = 0;
 
         if ($isMember['exists']) {
-            $diskon = $isMember['member']->type === 'pengurus' ? 30 : (($tickets === 2) ? 20 : (($tickets === 3) ? 25 : ($tickets > 3 ? 30 : 0)));
+            $diskon = ($isMember['member']->type === 'pengurus' || $isMember['member']->type === 'panitia') ? 30 : (($tickets === 2) ? 20 : (($tickets === 3) ? 25 : ($tickets > 3 ? 30 : 0)));
         } else {
             $diskon = 0;
         }
@@ -225,7 +290,7 @@ class RegistrationController extends Controller
         $totalHarga = $subtotal - $totalDiskon;
 
         return [
-            'member' => $isMember ? 'ya' : 'tidak',
+            'member' => $isMember['exists'] ? 'Ya' : 'Tidak',
             'diskon' => $diskon,
             'totalDiskon' => $totalDiskon,
             'amount' => $totalHarga,
@@ -252,7 +317,7 @@ class RegistrationController extends Controller
     public function generateQRCode($registration_id, $name)
     {
         $data = formatString($name) . '/' . $registration_id;
-        $filename = formatString($name) . '-' . now() . '.svg';
+        $filename = formatString($name) . '-' . time() . '.svg';
 
         $directoryPath = public_path('storage/qrcodes');
         $filePath = $directoryPath . '/' . $filename;
@@ -285,29 +350,7 @@ Sampai jumpa di acara nanti!
 Salam,
 *ASLI DPD RIAU*';
 
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => 'https://notificationwa.com/api/post',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => array(
-                'isi_pesan' => $getPesan,
-                'nomor_recieved' => $target
-            ),
-            CURLOPT_HTTPHEADER => array(
-                "Authorization: $token"
-            ),
-        ));
-
-        $response = curl_exec($curl);
-
-        curl_close($curl);
+        $this->sendNotification($getPesan, $target);
     }
 
     public function notification(
@@ -321,7 +364,6 @@ Salam,
         $final,
         $target
     ) {
-        $token = env('WA_TOKEN');
 
         $getPesan = '*E-INVOICE PEMESANAN TIKET*
 
@@ -331,8 +373,8 @@ Tanggal Transaksi : *' . now() . '*
 Pemesan : *' . $nama . '*
 Member : *' . $member . '*
 
-Harga per Tiket : *' . $tiket . '*
-Harga : *' . idrFormat($harga) . '*
+Jumlah Tiket : *' . $tiket . '*
+Harga per tiket : *' . idrFormat($harga) . '*
 Subtotal : *' . idrFormat($subtotal) . '*
 Diskon (' . $diskon_percentage . '%): *' . idrFormat($diskon) . '*
 
@@ -354,28 +396,49 @@ Terima kasih atas kepercayaan Anda.
 Salam,
 *ASLI DPD RIAU*';
 
-        $curl = curl_init();
+        $this->sendNotification($getPesan, $target);
+    }
 
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => 'https://notificationwa.com/api/post',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => array(
-                'isi_pesan' => $getPesan,
-                'nomor_recieved' => $target
-            ),
-            CURLOPT_HTTPHEADER => array(
-                "Authorization: $token"
-            ),
-        ));
+    private function sendNotifikasiReminderPembayaran($name, $tickets, $amount, $phone_number)
+    {
+        $getPesan = '*REMINDER PEMBAYARAN TIKET*
 
-        $response = curl_exec($curl);
+Hai, *' . $name . '*! Kami ingin mengingatkan bahwa pembayaran tiket Anda belum kami terima. Berikut detail pesanan Anda:
 
-        curl_close($curl);
+Tanggal Pesanan : *' . now() . '*
+Nama Pemesan : *' . $name . '*
+Jumlah Tiket : *' . $tickets . '*
+Total Pembayaran : *' . idrFormat($amount) . '*
+
+Silakan transfer ke rekening berikut:
+
+Bank BCA
+No. Rekening: *0343744665*
+A.n.: *Agustony Pangaribuan*
+
+*Note: Kirim bukti transfer ke WhatsApp ini setelah melakukan pembayaran, Jika tidak maka registrasi belum bisa diproses.*
+
+Terima kasih atas kepercayaan Anda. Sampai ketemu di acara nanti!
+
+Salam,
+*ASLI DPD RIAU*';
+
+            $this->sendNotification($getPesan, $phone_number);
+    }
+
+    private function formatPhoneNumber($phoneNumber)
+    {
+        $phoneNumber = preg_replace('/\D/', '', $phoneNumber);
+
+        if (substr($phoneNumber, 0, 2) === '62') {
+            $phoneNumber = '0' . substr($phoneNumber, 2);
+        }
+
+        if (substr($phoneNumber, 0, 2) !== '08') {
+            $phoneNumber = '08' . $phoneNumber;
+        }
+
+        return $phoneNumber;
     }
 }
+

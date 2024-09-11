@@ -525,6 +525,21 @@ footer img {
     margin-right: 30px;
 }
 
+input[readonly] {
+    background-color: #e9ecef;
+    color: #6c757d;
+    border-color: #ced4da;
+    opacity: 1;
+}
+
+input[readonly]:focus {
+    background-color: #e9ecef;
+    color: #6c757d;
+    border-color: #ced4da;
+    opacity: 1;
+}
+
+
 @media (max-width: 576px) {
     .container-beranda {
         margin-right: 0;
@@ -690,9 +705,165 @@ footer img {
 
 
 /* Small devices (tablets) */
-@media (min-width: 576px) and (max-width: 767.98px) {
-    body {
+@media (min-width: 576px) and (max-width: 900px) {
+    .container-beranda {
+        margin-right: 0;
+        margin-left: 0;
+    }
+
+    .container-beranda .navbar {
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .container-beranda .navbar-brand {
+        gap: 5px!important;
+    }
+
+
+    .container-beranda .navbar-brand img {
+        width: 80px;
+        height: 80px;
+    }
+
+    nav.navbar .company-name {
+        font-weight: 700;
+        font-size: 20px;
+    }
+
+    .container-beranda .beranda .content {
+        margin-left: 30px;
+        max-width: 75%;
+    }
+
+    .container-beranda .beranda h1{
+        font-size: 33px;
+        margin-top: 30px;
+    }
+
+    .container-beranda .beranda p.tagline {
+        font-size: 18px;
+        margin-top: 10px;
+    }
+
+    .container-beranda .beranda a.btn {
+        font-size: 18px;
+        margin-top: 20px;
+    }
+
+    .container-beranda .beranda p.warning {
+        font-size: 14px;
+        margin-left: 10px;
+    }
+
+    .beranda .right {
+        padding-left: 40px;
+        padding-right: 40px;
+        margin-top: 20px;
+    }
+
+    .hitung-mundur p.highlight {
+        font-size: 18px;
+        color: #003D75;
+    }
+
+    .hitung-mundur .card span,
+    .hitung-mundur .card.peserta span {
         font-size: 15px;
-        overflow-x: hidden!important;
+    }
+
+    .hitung-mundur .card h5 {
+        font-size: 25px;
+    }
+
+    .hitung-mundur .card.peserta {
+        padding: 16px 5px;
+    }
+
+    .hitung-mundur .card.peserta h5 {
+        font-size: 30px;
+    }
+
+    .hitung-mundur .card {
+        margin-bottom: 10px;
+        border-radius: 10px;
+    }
+
+    footer {
+        text-align: center;
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+
+    footer img {
+        width: 61px;
+        height: 32px;
+    }
+
+    .modal .container-btn {
+        display: flex;
+        background: white;
+        position: absolute;
+        top: -50px;
+        right: 0;
+        border-radius: 50%;
+        padding: 5px;
+    }
+
+    .registration {
+        margin-right: 15px;
+        margin-left: 15px;
+    }
+
+    .registration .wizard-form {
+        width: 100%;
+        padding: 10px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+
+    .registration .wizard-form h4 {
+        font-size: 25px;
+    }
+
+    .registration .card.wizard-form .form-label {
+        font-size: 14px;
+    }
+
+    .registration .card.wizard-form .form-control, .registration .card.wizard-form .form-select {
+        font-size: 16px;
+    }
+
+    .f1-buttons {
+        font-size: 16px;
+    }
+
+    .poster {
+        display: inline-block;
+    }
+
+    .tickets h5 {
+        font-size: 35px;
+    }
+
+    .tickets .detail {
+        font-size: 16px;
+        text-align: center;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .tickets .row{
+        margin-top: 10px;
+        display: flex;
+    }
+
+    .tickets .qrcodes {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
     }
 }
