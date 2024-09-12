@@ -23,7 +23,9 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'view pendaftar']);
         Permission::create(['name' => 'view member']);
         Permission::create(['name' => 'view absensi']);
-
+        Permission::create(['name' => 'view peserta']);
+        Permission::create(['name' => 'view qrcode']);
+        Permission::create(['name' => 'reminder pembayaran']);
         Permission::create(['name' => 'read all_users']);
 
         // create roles and assign created permissions
@@ -31,7 +33,8 @@ class RolesAndPermissionSeeder extends Seeder
         // this can be done as separate statements
         $role = Role::create(['name' => 'admin']);
         $role->givePermissionTo('view pendaftar');
-        $role->givePermissionTo('view absensi');
+        $role->givePermissionTo('view peserta');
+        $role->givePermissionTo('view qrcode');
 
         $role = Role::create(['name' => 'super-admin']);
         $role->givePermissionTo(Permission::all());

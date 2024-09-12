@@ -77,9 +77,17 @@
             <div class="col-md-4 col-xl-3">
                 <x-search.basic placeholder="Pendaftar" />
             </div>
-            <div class="col-md-8 col-xl-9 text-end d-flex justify-content-md-end justify-content-center mt-3 mt-md-0">
-                <a href="{{ route('pendaftar.reminder-pembayaran') }}" id="btnReminder" class="btn btn-warning text-capitalize fs-4">
-                    Reminder pembayaran
+            <div class="col-md-8 col-xl-9 text-end d-flex justify-content-md-end justify-content-center mt-3 mt-md-0 gap-2">
+                @can('reminder pembayaran')
+                    <a href="{{ route('pendaftar.reminder-pembayaran') }}" id="btnReminder"
+                        class="btn btn-warning text-capitalize fs-4">
+                        Reminder pembayaran
+                    </a>
+                @endcan
+
+                <a target="_blank" href="{{ route('pendaftar.download') }}" class="btn btn-success fs-3 fw-bold">
+                    <i class="ti ti-file-spreadsheet"></i>
+                    Download
                 </a>
             </div>
         </div>
@@ -119,18 +127,19 @@
                             </div>
                         </td>
                         <td>
-                            <img src="{{ asset('storage/' . $item->bukti_pembayaran) }}" alt="Bukti pembayaran"
-                            width="150" height="200">
+                            <img src="{{ asset('storage/' . $item->bukti_pembayaran) }}" alt="Bukti pembayaran" width="150"
+                                height="200">
                         </td>
                         <td>
-                            <span class="badge {{ $item->payment_status === 'lunas' ? 'bg-success' : 'bg-info' }}">{{ $item->payment_status }}</span>
+                            <span
+                                class="badge {{ $item->payment_status === 'lunas' ? 'bg-success' : 'bg-info' }}">{{ $item->payment_status }}</span>
                         </td>
                         <td>
                             @if ($item->payment_status === 'lunas')
                                 -
                             @else
                                 <a href="#" class="text-capitalize fs-4"
-                                onclick="showModal('{{ route('pendaftar.update', ['id' => $item->id]) }}')">
+                                    onclick="showModal('{{ route('pendaftar.update', ['id' => $item->id]) }}')">
                                     Verifikasi
                                 </a>
                             @endif
@@ -143,25 +152,20 @@
 
     <x-modal.basic title="Verifikasi pembayaran" isUpdate=1>
         <div class="mb-3">
-            <x-forms.input2
-                label="Bukti pembayaran"
-                name="bukti_pembayaran"
-                placeholder="Masukkan bukti pembayaran"
-                type="File"
-            />
+            <x-forms.input2 label="Bukti pembayaran" name="bukti_pembayaran" placeholder="Masukkan bukti pembayaran"
+                type="File" />
         </div>
     </x-modal.basic>
 @endsection
 
 @push('scripts')
     <script>
-        function showModal(route)
-        {
+        function showModal(route) {
             $('#defaultModal').modal('show');
             $("#defaultModal form").attr('action', route)
         }
 
-        $("#btnReminder").on('click', function (e) {
+        $("#btnReminder").on('click', function(e) {
             e.preventDefault();
 
             var href = $(this).attr('href');

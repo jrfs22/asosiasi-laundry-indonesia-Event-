@@ -17,8 +17,8 @@ class DatabaseSeeder extends Seeder
             RolesAndPermissionSeeder::class,
             UserSeeder::class,
             EventsModelSeeder::class,
-            // RegistrationModelSeeder::class,
-            // ParticipantsModelSeeder::class,
+            RegistrationModelSeeder::class,
+            ParticipantsModelSeeder::class,
             MembersModelSeeder::class
         ]);
     }

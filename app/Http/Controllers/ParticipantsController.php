@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Excel;
 use Exception;
 use App\Models\EventsModel;
 use Illuminate\Http\Request;
@@ -9,10 +10,33 @@ use App\Models\ParticipantsModel;
 use App\Models\RegistrationModel;
 use App\Traits\NotificationTraits;
 use Illuminate\Support\Facades\Log;
+use App\Exports\ParticipantQrCodeExport;
+use App\Exports\ParticipantQrCodeExposrt;
 
 class ParticipantsController extends Controller
 {
     use NotificationTraits;
+    public function qrcode()
+    {
+        $events = EventsModel::all();
+        $participants = ParticipantsModel::with('event')->get();
+
+        $qrcode = [
+            'has' => 0,
+            'doesnt' => 0
+        ];
+        if ($participants) {
+            $qrcode['has'] = $participants->where('qrcode', '!=', null)->count();
+            $qrcode['doesnt'] = $participants->where('qrcode', null)->count();
+        }
+
+        return view('after-login.qrcode.index')->with([
+            'participants' => $participants,
+            'events' => $events,
+            'qrcode' => $qrcode
+        ]);
+    }
+
     public function peserta()
     {
         $events = EventsModel::all();
@@ -63,6 +87,11 @@ class ParticipantsController extends Controller
 
             return redirect()->route('pendaftar');
         }
+    }
+
+    public function download()
+    {
+        return Excel::download(new ParticipantQrCodeExport, 'qrcode.xlsx');
     }
 
     private function sendNotifikasiReminderAcara($name, $tickets, $amount, $phone_number)

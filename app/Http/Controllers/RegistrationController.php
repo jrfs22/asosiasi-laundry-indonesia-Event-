@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Traits\NotificationTraits;
+use App\Exports\PesertaExport;
 use Event;
 use Exception;
 use App\Models\EventsModel;
 use App\Models\MembersModel;
 use Illuminate\Http\Request;
+use App\Exports\PendaftarExport;
 use App\Models\ParticipantsModel;
 use App\Models\RegistrationModel;
+use App\Traits\NotificationTraits;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
@@ -21,7 +24,15 @@ class RegistrationController extends Controller
     use NotificationTraits;
     public function index()
     {
-        return view('before-login.registration');
+        $event = EventsModel::with('participants')->latest()->first();
+
+        $event->participant_summary = $event->participants->count();
+
+        if($event->participant_summary < $event->max_participants) {
+            return view('before-login.registration');
+        } else {
+            return view('before-login.close-message');
+        }
     }
 
     public function pendaftar()
@@ -274,6 +285,16 @@ class RegistrationController extends Controller
         }
     }
 
+    public function download()
+    {
+        return Excel::download(new PendaftarExport, 'pendaftar.xlsx');
+    }
+
+    public function downloadPeserta()
+    {
+        return Excel::download(new PesertaExport, 'peserta.xlsx');
+    }
+
     public function countAmount($isMember, $tickets)
     {
         $hargaDasar = $isMember['exists'] ? 200000 : 250000;
@@ -439,6 +460,23 @@ Salam,
         }
 
         return $phoneNumber;
+    }
+
+    public function cekBarcode($name, $registration_id)
+    {
+        $register = RegistrationModel::where('id', $registration_id)->exists();
+
+        if($register) {
+            $participant = ParticipantsModel::where(DB::raw("REPLACE(LOWER(name), ' ', '-')"), $name)->exists();
+
+            return response()->json([
+                'exists' => true
+            ]);
+        } else {
+            return response()->json([
+                'exists' => false
+            ]);
+        }
     }
 }
 
