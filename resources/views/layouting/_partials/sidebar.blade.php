@@ -15,24 +15,24 @@
                     <span class="hide-menu">Home</span>
                 </li>
                 @role('super-admin')
-                <li class="sidebar-item">
-                    <a class="sidebar-link {{ isRouteActive('events') ? 'active' : '' }}"
-                        href="{{ route('events') }}" aria-expanded="false">
-                        <span>
-                            <i class="ti ti-calendar-event"></i>
-                        </span>
-                        <span class="hide-menu">Events</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a class="sidebar-link {{ isRouteActive('member') ? 'active' : '' }}"
-                        href="{{ route('member') }}" aria-expanded="false">
-                        <span>
-                            <i class="ti ti-users"></i>
-                        </span>
-                        <span class="hide-menu">Member</span>
-                    </a>
-                </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link {{ isRouteActive('events') ? 'active' : '' }}"
+                            href="{{ route('events') }}" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-calendar-event"></i>
+                            </span>
+                            <span class="hide-menu">Events</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link {{ isRouteActive('member') ? 'active' : '' }}"
+                            href="{{ route('member') }}" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-users"></i>
+                            </span>
+                            <span class="hide-menu">Member</span>
+                        </a>
+                    </li>
                 @endrole
                 <li class="sidebar-item">
                     <a class="sidebar-link {{ isRouteActive('pendaftar') ? 'active' : '' }}"
@@ -50,6 +50,15 @@
                             <i class="ti ti-users"></i>
                         </span>
                         <span class="hide-menu">Peserta</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link {{ isRouteActive('qrcode') ? 'active' : '' }}"
+                        href="{{ route('qrcode') }}" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-qrcode"></i>
+                        </span>
+                        <span class="hide-menu">QR Code</span>
                     </a>
                 </li>
             </ul>

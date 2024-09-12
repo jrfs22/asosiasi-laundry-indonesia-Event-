@@ -1,13 +1,9 @@
 @extends('layouting.auth')
 
-@section('title', 'Peserta')
-
-@push('headers')
-    <link rel="stylesheet" href="{{ asset('assets/auth/css/carousel.css') }}">
-@endpush
+@section('title', 'QR Code')
 
 @section('content')
-    <x-card.breadcrumb main="Home" current="Absensi" route="{{ route('peserta') }}" />
+    <x-card.breadcrumb main="Home" current="QR Code" route="{{ route('qrcode') }}" />
 
     <div class="row">
         <div class="col-12 col-lg-6">
@@ -44,15 +40,20 @@
 
     <div class="card card-body">
         <div class="row">
-            <div class="col-md-4 col-xl-3">
+            <div class="col-12 col-lg-6">
                 <x-search.basic placeholder="Members" />
             </div>
-            <div class="col-md-8 col-xl-9 text-end d-flex justify-content-md-end justify-content-center mt-3 mt-md-0">
+            <div class="col-12 col-lg-6 text-end d-flex justify-content-md-end justify-content-center mt-3 mt-md-0 gap-2">
                 <x-search.filter>
                     <option value="member">Member</option>
                     <option value="panitia">Panitia</option>
                     <option value="pengurus">Pengurus</option>
                 </x-search.filter>
+
+                <a target="_blank" href="{{ route('pendaftar.download') }}" class="btn btn-success fs-3 fw-bold">
+                    <i class="ti ti-file-spreadsheet"></i>
+                    Download
+                </a>
             </div>
         </div>
     </div>
@@ -66,15 +67,11 @@
                 <th>Sertifikat</th>
                 <th>QR Code</th>
                 <th>Jabatan</th>
-                <th>Status</th>
             @endslot
 
             @slot('slotBody')
                 @foreach ($participants as $item)
                     <tr class="search-items {{ $item->type }}">
-                        {{-- <td class="w-20">
-                            <span>{{ $item->event->name }}</span>
-                        </td> --}}
                         <td>
                             <h6>{{ $item->name }}</h6>
                             <span>{{ $item->phone_number }}</span>
@@ -90,9 +87,6 @@
                         </td>
                         <td>
                             <span class="text-capitalize">{{ $item->type }}</span>
-                        </td>
-                        <td>
-                            <span class="text-capitalize">hadir</span>
                         </td>
                     </tr>
                 @endforeach

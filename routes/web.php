@@ -12,8 +12,6 @@ use App\Http\Controllers\AuthenticationController;
 
 
 Route::middleware('guest')->group(function () {
-    // Route::get('qr', [QrCodeController::class, 'show']);
-    // Route::get('whatsapp', [QrCodeController::class, 'whatsapp']);
 
     Route::get('', [BerandaController::class, 'index'])->name('beranda');
     // Route::get('test', function () {
@@ -55,13 +53,23 @@ Route::middleware('auth')->group(function () {
 
         Route::put('{id?}', [RegistrationController::class, 'update'])->name('pendaftar.update');
 
-        Route::get('reminder-pembayaran', [RegistrationController::class, 'sendReminderPembayaran'])->name('pendaftar.reminder-pembayaran');
+        Route::get('reminder-pembayaran', [RegistrationController::class, 'sendReminderPembayaran'])->name('pendaftar.reminder-pembayaran')->middleware('can:reminder pembayaran');
+
+        Route::get('download', [RegistrationController::class, 'download'])->name('pendaftar.download');
     });
 
-    Route::prefix('peserta')->middleware('can:view absensi')->group(function () {
+    Route::prefix('peserta')->middleware('can:view peserta')->group(function () {
         Route::get('', [ParticipantsController::class, 'peserta'])->name('peserta');
 
         Route::get('reminder-acara', [ParticipantsController::class, 'sendReminderAcara'])->name('pendaftar.reminder-acara');
+
+        Route::get('download', [RegistrationController::class, 'downloadPeserta'])->name('pendaftar.download');
+    });
+
+    Route::prefix('qrcode')->middleware('can:view qrcode')->group(function () {
+        Route::get('', [ParticipantsController::class, 'qrcode'])->name('qrcode');
+
+        Route::get('download', [ParticipantsController::class, 'download'])->name('qrcode.download');
     });
 
 

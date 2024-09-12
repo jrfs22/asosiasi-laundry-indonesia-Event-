@@ -27,6 +27,4 @@ class EventsModel extends Model
     {
         return $this->hasMany(ParticipantsModel::class, 'event_id', 'id');
     }
-
-    
 }

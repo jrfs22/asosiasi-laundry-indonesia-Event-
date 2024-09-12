@@ -539,6 +539,31 @@ input[readonly]:focus {
     opacity: 1;
 }
 
+.close-registration .card {
+    padding: 40px;
+    border-radius: 20px;
+    gap: 10px;
+}
+
+.close-registration h1 {
+    color: #003D75;
+    text-align: center;
+    font-family: var(--inter);
+    font-size: 50px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.close-registration p {
+    color: #000;
+    text-align: center;
+    font-family: var(--poppins);
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
 
 @media (max-width: 576px) {
     .container-beranda {
@@ -701,6 +726,24 @@ input[readonly]:focus {
         justify-content: center;
         margin-bottom: 20px;
     }
+
+    .close-registration {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    .close-registration h1 {
+        font-size: 30px;
+    }
+
+    .close-registration p {
+        font-size: 16px;
+    }
+
+    .close-registration img.close-img {
+        width: 101px;
+        height: 118px;
+    }
 }
 
 
@@ -793,13 +836,8 @@ input[readonly]:focus {
 
     footer {
         text-align: center;
-        font-size: 18px;
+        font-size: 25px;
         margin-bottom: 15px;
-    }
-
-    footer img {
-        width: 61px;
-        height: 32px;
     }
 
     .modal .container-btn {
@@ -865,5 +903,18 @@ input[readonly]:focus {
         align-items: center;
         justify-content: center;
         margin-bottom: 20px;
+    }
+
+    .close-registration {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    .close-registration h1 {
+        font-size: 40px;
+    }
+
+    .close-registration p {
+        font-size: 18px;
     }
 }
