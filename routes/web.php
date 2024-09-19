@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\AbsensiController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\EventsController;
 use App\Http\Controllers\QrCodeController;
 use App\Http\Controllers\RewardController;
@@ -12,7 +14,6 @@ use App\Http\Controllers\AuthenticationController;
 
 
 Route::middleware('guest')->group(function () {
-
     Route::get('', [BerandaController::class, 'index'])->name('beranda');
     // Route::get('test', function () {
     //     return view('before-login.test');
@@ -23,7 +24,7 @@ Route::middleware('guest')->group(function () {
 
 
     Route::prefix('tickets')->group(function () {
-        Route::get('{name}/{participant_id}', [RegistrationController::class, 'tickets'])->name('tickets');
+        Route::get('{name}/{participant_id}', [RegistrationController::class, 'tickets'])->name(name: 'tickets');
     });
 
     Route::prefix('registrasi')->group(function () {
@@ -38,6 +39,16 @@ Route::middleware('guest')->group(function () {
 
 
 Route::middleware('auth')->group(function () {
+    Route::get('down', function () {
+        Artisan::call('down', [
+            '--secret' => 'zalamobile123',
+        ]);
+    });
+
+    Route::get('up', function () {
+        Artisan::call('up');
+    });
+
     Route::get('remove-cache', [QrCodeController::class, 'removeCache']);
 
     Route::prefix('events')->middleware('can:view events')->group(function () {
@@ -61,7 +72,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('peserta')->middleware('can:view peserta')->group(function () {
         Route::get('', [ParticipantsController::class, 'peserta'])->name('peserta');
 
-        Route::get('reminder-acara', [ParticipantsController::class, 'sendReminderAcara'])->name('pendaftar.reminder-acara');
+        Route::get('reminder-acara', [ParticipantsController::class, 'EventReminder'])->name('pendaftar.reminder-acara');
 
         Route::get('download', [RegistrationController::class, 'downloadPeserta'])->name('pendaftar.download');
     });
@@ -70,6 +81,19 @@ Route::middleware('auth')->group(function () {
         Route::get('', [ParticipantsController::class, 'qrcode'])->name('qrcode');
 
         Route::get('download', [ParticipantsController::class, 'download'])->name('qrcode.download');
+    });
+
+
+    Route::prefix('absensi')->group(function () {
+        Route::get('', [AbsensiController::class, 'absensi'])
+            ->middleware('can:read absensi')
+            ->name('absensi');
+
+        Route::get('scan', [AbsensiController::class, 'scan'])
+            ->middleware('can:create absensi')
+            ->name('scan');
+
+        Route::get('validate-qrcode/{name}/{participant_id}', [AbsensiController::class, 'validateQrCode'])->name('absensi.validate');
     });
 
 

@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\NotificationHistoriesModel;
+use App\Services\NotificationService;
+use Carbon\Carbon;
 use Excel;
 use Exception;
 use App\Models\EventsModel;
@@ -15,7 +18,6 @@ use App\Exports\ParticipantQrCodeExposrt;
 
 class ParticipantsController extends Controller
 {
-    use NotificationTraits;
     public function qrcode()
     {
         $events = EventsModel::all();
@@ -39,13 +41,18 @@ class ParticipantsController extends Controller
 
     public function peserta()
     {
-        $events = EventsModel::all();
+        $events = EventsModel::first();
         $participants = ParticipantsModel::with('event')->get();
 
         $qrcode = [
             'has' => 0,
             'doesnt' => 0
         ];
+        $reminder = [
+            'exist' => daysUntilDate($events->date) == 3 || daysUntilDate($events->date) <= 1,
+            'days' => daysUntilDate($events->date)
+        ];
+
         if ($participants) {
             $qrcode['has'] = $participants->where('qrcode', '!=', null)->count();
             $qrcode['doesnt'] = $participants->where('qrcode', null)->count();
@@ -53,29 +60,93 @@ class ParticipantsController extends Controller
 
         return view('after-login.peserta.index')->with([
             'participants' => $participants,
-            'events' => $events,
+            'reminder' => $reminder,
             'qrcode' => $qrcode
         ]);
     }
 
-    public function sendReminderAcara()
+    public function EventReminder()
     {
         try {
-            $register = RegistrationModel::where('payment_status', operator: 'belum bayar')->get();
+            $register = RegistrationModel::with(['participants', 'event'])->where('payment_status', operator: 'lunas')->get();
 
-            foreach ($register as $item) {
-                $this->sendNotifikasiReminderAcara($item->name, $item->tickets, $item->amount, $item->phone_number);
+            if($register->isNotEmpty()) {
+                ini_set('max_execution_time', 300);
+                $event = EventsModel::first();
 
-                sleep(rand(1, 10));
+                $diffDays = daysUntilDate($event->date);
+
+                $countNotificationHistories = NotificationHistoriesModel::where('type', 'event reminder')->count();
+
+                if ($diffDays <= 3 && $countNotificationHistories < 2) {
+                    if($diffDays > 1 && $countNotificationHistories > 0) {
+                        $this->alert(
+                            'Reminder Event',
+                            'Selanjutnya untuk H-1',
+                            'error'
+                        );
+
+                        return redirect()->route('peserta');
+                    }
+
+                    $notificationService = new NotificationService;
+
+                    foreach ($register as $registerItem) {
+                        foreach ($registerItem->participants as $item) {
+                            $message = $notificationService->sendEventReminder(
+                                $item->name,
+                                $registerItem->event->name,
+                                $item->phone_number,
+                                $diffDays
+                            );
+
+                            if($message) {
+                                NotificationHistoriesModel::create([
+                                    'message' => $message,
+                                    'type' => 'event reminder',
+                                    'platform' => 'WhatsApp',
+                                    'receiver' => $item->phone_number,
+                                ]);
+                            }
+
+                            sleep(rand(1, 5));
+                        }
+                    }
+
+                    $this->alert(
+                        'Reminder Event',
+                        'System berhasil mengirimkan notifikasi',
+                        'success'
+                    );
+
+                    return redirect()->route('peserta');
+                } else {
+                    if($diffDays > 3) {
+                        $this->alert(
+                            'Reminder Event',
+                            'Reminder Hanya Untuk H-3 dan H-1',
+                            'error'
+                        );
+                    }
+
+                    if($countNotificationHistories == 2) {
+                        $this->alert(
+                            'Reminder Event',
+                            'Reminder Hanya Untuk 2 Kali',
+                            'error'
+                        );
+                    }
+                    return redirect()->route('peserta');
+                }
+            } else {
+                $this->alert(
+                    'Reminder Event',
+                    'Tidak terdapat peserta',
+                    'error'
+                );
+
+                return redirect()->route('peserta');
             }
-
-            $this->alert(
-                'Reminder berhasil dikirimkan',
-                'System akan mengirimkan segera',
-                'success'
-            );
-
-            return redirect()->route('pendaftar');
         } catch (Exception $e) {
             $this->alert(
                 'Gagal melakukan reminder',
@@ -85,39 +156,12 @@ class ParticipantsController extends Controller
 
             Log::error($e->getMessage());
 
-            return redirect()->route('pendaftar');
+            return redirect()->route('peserta');
         }
     }
 
     public function download()
     {
         return Excel::download(new ParticipantQrCodeExport, 'qrcode.xlsx');
-    }
-
-    private function sendNotifikasiReminderAcara($name, $tickets, $amount, $phone_number)
-    {
-        $getPesan = '*REMINDER PEMBAYARAN TIKET*
-
-Hai, *' . $name . '*! Kami ingin mengingatkan bahwa pembayaran tiket Anda belum kami terima. Berikut detail pesanan Anda:
-
-Tanggal Pesanan : *' . now() . '*
-Nama Pemesan : *' . $name . '*
-Jumlah Tiket : *' . $tickets . '*
-Total Pembayaran : *' . idrFormat($amount) . '*
-
-Silakan transfer ke rekening berikut:
-
-Bank BCA
-No. Rekening: *0343744665*
-A.n.: *Agustony Pangaribuan*
-
-*Note: Kirim bukti transfer ke WhatsApp ini setelah melakukan pembayaran, Jika tidak maka registrasi belum bisa diproses.*
-
-Terima kasih atas kepercayaan Anda. Sampai ketemu di acara nanti!
-
-Salam,
-*ASLI DPD RIAU*';
-
-            $this->sendNotification($getPesan, $phone_number);
     }
 }

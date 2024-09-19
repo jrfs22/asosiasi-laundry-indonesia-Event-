@@ -16,6 +16,9 @@ return new class extends Migration
             $table->unsignedBigInteger('event_id');
             $table->unsignedBigInteger('registration_id');
             $table->unsignedBigInteger('participant_id');
+            $table->enum('type', [
+                'absensi', 'konsumsi'
+            ]);
             $table->timestamps();
 
             $table->foreign('registration_id')->references('id')->on('registration');

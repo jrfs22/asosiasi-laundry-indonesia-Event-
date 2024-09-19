@@ -26,7 +26,11 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'view peserta']);
         Permission::create(['name' => 'view qrcode']);
         Permission::create(['name' => 'reminder pembayaran']);
+        Permission::create(['name' => 'reminder acara']);
         Permission::create(['name' => 'read all_users']);
+
+        Permission::create(['name' => 'create absensi']);
+        Permission::create(['name' => 'read absensi']);
 
         // create roles and assign created permissions
 

@@ -23,8 +23,9 @@
                 <th class="w-20">Event</th>
                 <th>Poster</th>
                 <th>Tanggal</th>
-                <th>Waktu</th>
-                <th>Maksimal Peserta</th>
+                <th>H- Acara</th>
+                <th class="text-center">Maksimal Peserta</th>
+                <th class="text-center">Jumlah Pendaftar</th>
                 <th>Status</th>
             @endslot
 
@@ -38,16 +39,20 @@
                             <span>{{ $item->poster }}</span>
                         </td>
                         <td>
-                            <span>{{ idnDate($item->date) }}</span>
-                        </td>
-                        <td>
+                            <h6>{{ idnDate($item->date) }}</h6>
                             <span>
                                 {{ $item->start_time }} -
                                 {{ $item->end_time }}
                             </span>
                         </td>
                         <td>
+                            <span>H-{{ daysUntilDate($item->date) }} Hari</span>
+                        </td>
+                        <td class="text-center">
                             <span>{{ $item->max_participants }}</span>
+                        </td>
+                        <td class="text-center">
+                            <span>{{ $item->participants_summary }}</span>
                         </td>
                         <td>
                             <span class="badge {{ $item->status === 'selesai' ? 'bg-info' : 'bg-success' }}">{{ $item->status }}</span>

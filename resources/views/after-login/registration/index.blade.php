@@ -74,10 +74,10 @@
 
     <div class="card card-body">
         <div class="row">
-            <div class="col-md-4 col-xl-3">
+            <div class="col-12 col-xl-4">
                 <x-search.basic placeholder="Pendaftar" />
             </div>
-            <div class="col-md-8 col-xl-9 text-end d-flex justify-content-md-end justify-content-center mt-3 mt-md-0 gap-2">
+            <div class="col-12 col-xl-8 text-end d-flex justify-content-md-end justify-content-center mt-3 mt-md-0 gap-2">
                 @can('reminder pembayaran')
                     <a href="{{ route('pendaftar.reminder-pembayaran') }}" id="btnReminder"
                         class="btn btn-warning text-capitalize fs-4">
@@ -89,6 +89,11 @@
                     <i class="ti ti-file-spreadsheet"></i>
                     Download
                 </a>
+
+                <x-search.filter>
+                    <option value="lunas">Lunas</option>
+                    <option value="belum bayar">Belum Bayar</option>
+                </x-search.filter>
             </div>
         </div>
     </div>
