@@ -16,5 +16,11 @@ class AttendacesModel extends Model
         'event_id',
         'registration_id',
         'participant_id',
+        'type'
     ];
+
+    public function participant(): BelongsTo
+    {
+        return $this->belongsTo(ParticipantsModel::class);
+    }
 }

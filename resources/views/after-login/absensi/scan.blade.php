@@ -54,6 +54,7 @@
     <x-card.breadcrumb main="Home" current="Scanning" route="{{ route('beranda') }}" />
 
     <div class="card card-body">
+
         <div class="w-100" id="reader"></div>
     </div>
 @endsection
@@ -72,10 +73,9 @@
         var html5QrcodeScanner = new Html5QrcodeScanner('reader', html5QrcodeScannerConfig)
 
         function onScanSuccess(decodedText) {
-            console.log(decodedText);
+            requestData(decodedText)
             stopScanning()
         }
-
 
         function onScanError(error) {}
 
@@ -97,6 +97,69 @@
 
         function stopScanning() {
             html5QrcodeScanner.clear();
+        }
+
+        function requestData(data) {
+            var route = {!! json_encode(route('absensi.validate')) !!} + '/' + data
+
+            $.ajax({
+                url: route,
+                type: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    var terdaftar = response.terdaftar
+                    var insert = response.insert
+
+                    if (terdaftar) {
+                        var name = response.name.toUpperCase()
+                        if (insert) {
+                            sweetAlert(
+                                "QR Code Valid",
+                                name + " berhasil di daftarkan, silahkan berikan konsumsinya",
+                                "success"
+                            );
+                        } else {
+                            sweetAlert(
+                                "QR Code Valid",
+                                name + " sudah mengambil konsumsi",
+                                "error"
+                            );
+                        }
+                    } else {
+                        if (insert) {} else {
+                            sweetAlert(
+                                "QR Code Invalid",
+                                "QR Code Tidak terdaftar",
+                                "error"
+                            );
+                        }
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.log(error);
+                }
+            })
+        }
+
+        function sweetAlert(title, text, icon) {
+            Swal.fire({
+                title: title,
+                text: text,
+                icon: icon,
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Cek Lagi?",
+                cancelButtonText: "Cek data absensi"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    location.reload()
+                } else {
+                    location.href = {!! json_encode(route('absensi')) !!}
+                }
+            });
         }
 
         $(document).ready(function() {
