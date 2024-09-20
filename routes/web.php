@@ -89,11 +89,11 @@ Route::middleware('auth')->group(function () {
             ->middleware('can:read absensi')
             ->name('absensi');
 
-        Route::get('scan', [AbsensiController::class, 'scan'])
+        Route::get('scan/{type?}', [AbsensiController::class, 'scan'])
             ->middleware('can:create absensi')
             ->name('scan');
 
-        Route::get('validate-qrcode/{name?}/{id?}', [AbsensiController::class, 'validateQrCode'])->name('absensi.validate');
+        Route::get('validate-qrcode/{type?}/{name?}/{id?}', [AbsensiController::class, 'validateQrCode'])->name('absensi.validate');
 
         Route::delete('{event_id}/{registration_id}/{participant_id}', [AbsensiController::class, 'destroy'])->name('absensi.destroy');
 

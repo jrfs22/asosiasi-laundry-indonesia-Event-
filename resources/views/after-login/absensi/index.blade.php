@@ -37,6 +37,24 @@
                     <i class="ti ti-file-spreadsheet"></i>
                     Download
                 </a>
+
+                @can('scan absensi')
+                    <div class="btn-group">
+                        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="ti ti-plus"></i>
+                            Absensi
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <li>
+                                <a class="dropdown-item" href="{{ route('scan', ['type' => 'kehadiran']) }}">Kehadiran</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ route('scan', ['type' => 'konsumsi']) }}">Konsumsi</a>
+                            </li>
+                        </ul>
+                    </div>
+                @endcan
             </div>
         </div>
     </div>
@@ -49,7 +67,9 @@
                 <th>Sertifikat</th>
                 <th>Absensi</th>
                 <th>Jumlah</th>
-                <th>Aksi</th>
+                @can('delete absensi')
+                    <th>Aksi</th>
+                @endcan
             @endslot
 
             @slot('slotBody')
@@ -79,16 +99,18 @@
                             {{ $item->attendances->count() }}
                             / <b>2</b>
                         </td>
-                        <td>
-                            <div class="action-btn d-flex">
-                                <x-card.deleted
-                                    route="{{ route('absensi.destroy', [
-                                        'event_id' => $item->event_id,
-                                        'participant_id' => $item->id,
-                                        'registration_id' => $item->registration_id,
-                                    ]) }}" />
-                            </div>
-                        </td>
+                        @can('delete absensi')
+                            <td>
+                                <div class="action-btn d-flex">
+                                    <x-card.deleted
+                                        route="{{ route('absensi.destroy', [
+                                            'event_id' => $item->event_id,
+                                            'participant_id' => $item->id,
+                                            'registration_id' => $item->registration_id,
+                                        ]) }}" />
+                                </div>
+                            </td>
+                        @endcan
                     </tr>
                 @endforeach
             @endslot

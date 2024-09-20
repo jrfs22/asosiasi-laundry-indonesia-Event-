@@ -1,6 +1,6 @@
 @extends('layouting.auth')
 
-@section('title', 'Scanning')
+@section('title', 'Scanning absensi ' . $type)
 
 @push('headers')
     <link rel="stylesheet" href="{{ asset('assets/auth/css/carousel.css') }}">
@@ -51,10 +51,15 @@
 @endpush
 
 @section('content')
-    <x-card.breadcrumb main="Home" current="Scanning" route="{{ route('beranda') }}" />
+    <x-card.breadcrumb main="Home" current="Scanning absensi {{ $type }}" route="{{ route('beranda') }}" />
 
     <div class="card card-body">
-
+        <div class="alert alert-light-danger bg-danger-subtle bg-danger-subtle text-danger" role="alert" style="display: none;" id="cameraNotFoundAlert">
+            <h4 class="alert-heading fs-6">Kamera tidak terdeteksi !!!</h4>
+            <p class="fs-5">
+                Kami membutuhkan permission untuk mengakses kamera anda!!
+            </p>
+        </div>
         <div class="w-100" id="reader"></div>
     </div>
 @endsection
@@ -89,9 +94,10 @@
 
                 const stream = await navigator.mediaDevices.getUserMedia(constraints)
 
+                $("#cameraNotFoundAlert").hide()
                 html5QrcodeScanner.render(onScanSuccess, onScanError);
             } catch (error) {
-                console.log('asd ', error);
+                $("#cameraNotFoundAlert").show()
             }
         }
 
@@ -100,7 +106,9 @@
         }
 
         function requestData(data) {
-            var route = {!! json_encode(route('absensi.validate')) !!} + '/' + data
+            var type = {!! json_encode($type) !!}
+
+            var route = {!! json_encode(route('absensi.validate')) !!} + '/' + type + '/' + data
 
             $.ajax({
                 url: route,
@@ -112,18 +120,20 @@
                     var terdaftar = response.terdaftar
                     var insert = response.insert
 
-                    if (terdaftar) {
+                    if (response.terdaftar) {
                         var name = response.name.toUpperCase()
+                        var type = response.type
+
                         if (insert) {
                             sweetAlert(
                                 "QR Code Valid",
-                                name + " berhasil di daftarkan, silahkan berikan konsumsinya",
+                                name + (type === 'kehadiran' ? " berhasil disimpan absennya" : " berhasil di daftarkan, silahkan berikan konsumsinya"),
                                 "success"
                             );
                         } else {
                             sweetAlert(
                                 "QR Code Valid",
-                                name + " sudah mengambil konsumsi",
+                                name + (type === 'kehadiran' ? " sudah absen" : " sudah mengambil konsumsi"),
                                 "error"
                             );
                         }
@@ -163,7 +173,7 @@
         }
 
         $(document).ready(function() {
-            startScanning();
+            startScanning()
         })
     </script>
 @endpush

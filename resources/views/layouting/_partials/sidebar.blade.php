@@ -1,7 +1,7 @@
 <aside class="left-sidebar">
     <div>
         <div class="brand-logo d-flex align-items-center justify-content-between">
-            <a href="./index.html" class="text-nowrap logo-img">
+            <a href="{{ route('beranda') }}" class="text-nowrap logo-img">
                 <img src="{{ asset('assets/logo/asli.png') }}" width="180" alt="" />
             </a>
             <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
@@ -62,33 +62,18 @@
                             <span class="hide-menu">QR Code</span>
                         </a>
                     </li>
+                @endrole
+                @can('read absensi')
                     <li class="sidebar-item">
-                        <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
-                            <span class="d-flex">
+                        <a class="sidebar-link {{ (isRouteActive('absensi') ? 'active' : (isRouteActive('scan') ? 'active' : '')) }}" href="{{ route('absensi') }}"
+                            aria-expanded="false">
+                            <span>
                                 <i class="ti ti-clock"></i>
                             </span>
                             <span class="hide-menu">Absensi</span>
                         </a>
-                        <ul aria-expanded="false" class="collapse first-level">
-                            <li class="sidebar-item">
-                                <a href="{{ route('absensi') }}" class="sidebar-link {{ isRouteActive('absensi') ? 'active' : '' }}">
-                                    <div class="round-16 d-flex align-items-center justify-content-center">
-                                        <i class="ti ti-circle"></i>
-                                    </div>
-                                    <span class="hide-menu">Data Absensi</span>
-                                </a>
-                            </li>
-                            <li class="sidebar-item">
-                                <a href="{{ route('scan') }}" class="sidebar-link {{ isRouteActive('scan') ? 'active' : '' }}">
-                                    <div class="round-16 d-flex align-items-center justify-content-center">
-                                        <i class="ti ti-circle"></i>
-                                    </div>
-                                    <span class="hide-menu">Scan</span>
-                                </a>
-                            </li>
-                        </ul>
                     </li>
-                @endrole
+                @endcan
             </ul>
         </nav>
     </div>

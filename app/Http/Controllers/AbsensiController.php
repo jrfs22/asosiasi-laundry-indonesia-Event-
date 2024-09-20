@@ -13,12 +13,12 @@ use Illuminate\Support\Facades\DB;
 
 class AbsensiController extends Controller
 {
-    public function scan()
+    public function scan($type)
     {
-        return view('after-login.absensi.scan');
+        return view('after-login.absensi.scan', compact('type'));
     }
 
-    public function validateQrCode(string $nameFormmating, string $registration_id)
+    public function validateQrCode(string $type, string $nameFormmating, string $registration_id)
     {
         $participant = ParticipantsModel::where(DB::raw("REPLACE(LOWER(name), ' ', '-')"), $nameFormmating)
             ->where('registration_id', $registration_id)
@@ -29,29 +29,31 @@ class AbsensiController extends Controller
                 ->where('event_id', $participant->event_id)
                 ->where('registration_id', $participant->registration_id)
                 ->where('participant_id', $participant->id)
-                ->first();
+                ->get();
 
-            if (isset($attendances)) {
-                return response()->json([
-                    'terdaftar' => true,
-                    'insert' => false,
-                    'name' => $attendances->participant->name
-                ]);
+            if ($attendances->isEmpty()) {
+                return $this->storeNewAttendaces(
+                    $participant->registration_id,
+                    $participant->event_id,
+                    $participant->id,
+                    $type
+                );
             } else {
-                $newData = AttendacesModel::with('participant')
-                    ->create([
-                        'registration_id' => $participant->registration_id,
-                        'event_id' => $participant->event_id,
-                        'participant_id' => $participant->id,
-                        'type' => 'konsumsi'
-                    ]);
-
-                if ($newData) {
+                $isExist = $attendances->where('type', $type);
+                if ($isExist->isNotEmpty()) {
                     return response()->json([
                         'terdaftar' => true,
-                        'insert' => true,
-                        'name' => $newData->participant->name
+                        'insert' => false,
+                        'type' => $type,
+                        'name' => $participant->name
                     ]);
+                } else {
+                    return $this->storeNewAttendaces(
+                        $participant->registration_id,
+                        $participant->event_id,
+                        $participant->id,
+                        $type
+                    );
                 }
             }
         }
@@ -59,6 +61,27 @@ class AbsensiController extends Controller
         return response()->json([
             'terdaftar' => false,
             'insert' => false
+        ]);
+    }
+
+    public function storeNewAttendaces(
+        $registration_id,
+        $event_id,
+        $participant_id,
+        $type
+    ) {
+        $newData = AttendacesModel::create([
+                'registration_id' => $registration_id,
+                'event_id' => $event_id,
+                'participant_id' => $participant_id,
+                'type' => $type
+            ]);
+
+        return response()->json([
+            'terdaftar' => true,
+            'insert' => true,
+            'name' => $newData->load('participant')->participant->name,
+            'type' => $type
         ]);
     }
 
@@ -76,7 +99,7 @@ class AbsensiController extends Controller
         try {
             $attendance = AttendacesModel::where('event_id', $event_id)->where('participant_id', $participant_id)->where('registration_id', $registration_id)->first();
 
-            if($attendance->delete()) {
+            if ($attendance->delete()) {
                 $this->alert(
                     'Absensi deleted',
                     'Data absensi berhasil dihapus',
