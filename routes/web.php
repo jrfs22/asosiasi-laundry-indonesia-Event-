@@ -93,9 +93,12 @@ Route::middleware('auth')->group(function () {
             ->middleware('can:create absensi')
             ->name('scan');
 
-        Route::get('validate-qrcode/{name}/{participant_id}', [AbsensiController::class, 'validateQrCode'])->name('absensi.validate');
-    });
+        Route::get('validate-qrcode/{name?}/{id?}', [AbsensiController::class, 'validateQrCode'])->name('absensi.validate');
 
+        Route::delete('{event_id}/{registration_id}/{participant_id}', [AbsensiController::class, 'destroy'])->name('absensi.destroy');
+
+        Route::get('download', [AbsensiController::class, 'download'])->name('absensi.download');
+    });
 
     Route::get('logout', [AuthenticationController::class, 'logout'])->name('logout');
 });

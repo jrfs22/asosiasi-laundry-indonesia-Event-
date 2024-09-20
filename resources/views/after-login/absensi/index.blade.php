@@ -28,7 +28,17 @@
     </div>
 
     <div class="card card-body">
-        <x-search.basic placeholder="Absensi" />
+        <div class="row">
+            <div class="col-12 col-md-3">
+                <x-search.basic placeholder="Absensi" />
+            </div>
+            <div class="col-12 col-md-9 text-end d-flex justify-content-md-end justify-content-center mt-3 mt-md-0 gap-2">
+                <a target="_blank" href="{{ route('absensi.download') }}" class="btn btn-success fs-3 fw-bold">
+                    <i class="ti ti-file-spreadsheet"></i>
+                    Download
+                </a>
+            </div>
+        </div>
     </div>
 
     <div class="card card-body">
@@ -39,6 +49,7 @@
                 <th>Sertifikat</th>
                 <th>Absensi</th>
                 <th>Jumlah</th>
+                <th>Aksi</th>
             @endslot
 
             @slot('slotBody')
@@ -48,7 +59,7 @@
                             {{ $key + 1 }}
                         </td>
                         <td>
-                            <h6>{{ $item->name }}</h6>
+                            <h6 class="text-capitalize">{{ $item->name }}</h6>
                             <span>{{ $item->phone_number }}</span>
                         </td>
                         <td>
@@ -67,6 +78,16 @@
                         <td>
                             {{ $item->attendances->count() }}
                             / <b>2</b>
+                        </td>
+                        <td>
+                            <div class="action-btn d-flex">
+                                <x-card.deleted
+                                    route="{{ route('absensi.destroy', [
+                                        'event_id' => $item->event_id,
+                                        'participant_id' => $item->id,
+                                        'registration_id' => $item->registration_id,
+                                    ]) }}" />
+                            </div>
                         </td>
                     </tr>
                 @endforeach
