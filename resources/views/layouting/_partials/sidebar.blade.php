@@ -16,8 +16,8 @@
                 </li>
                 @role('super-admin')
                     <li class="sidebar-item">
-                        <a class="sidebar-link {{ isRouteActive('events') ? 'active' : '' }}"
-                            href="{{ route('events') }}" aria-expanded="false">
+                        <a class="sidebar-link {{ isRouteActive('events') ? 'active' : '' }}" href="{{ route('events') }}"
+                            aria-expanded="false">
                             <span>
                                 <i class="ti ti-calendar-event"></i>
                             </span>
@@ -25,8 +25,8 @@
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link {{ isRouteActive('member') ? 'active' : '' }}"
-                            href="{{ route('member') }}" aria-expanded="false">
+                        <a class="sidebar-link {{ isRouteActive('member') ? 'active' : '' }}" href="{{ route('member') }}"
+                            aria-expanded="false">
                             <span>
                                 <i class="ti ti-users"></i>
                             </span>
@@ -44,23 +44,51 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link {{ isRouteActive('peserta') ? 'active' : '' }}"
-                        href="{{ route('peserta') }}" aria-expanded="false">
+                    <a class="sidebar-link {{ isRouteActive('peserta') ? 'active' : '' }}" href="{{ route('peserta') }}"
+                        aria-expanded="false">
                         <span>
                             <i class="ti ti-users"></i>
                         </span>
                         <span class="hide-menu">Peserta</span>
                     </a>
                 </li>
-                <li class="sidebar-item">
-                    <a class="sidebar-link {{ isRouteActive('qrcode') ? 'active' : '' }}"
-                        href="{{ route('qrcode') }}" aria-expanded="false">
-                        <span>
-                            <i class="ti ti-qrcode"></i>
-                        </span>
-                        <span class="hide-menu">QR Code</span>
-                    </a>
-                </li>
+                @role('super-admin')
+                    <li class="sidebar-item">
+                        <a class="sidebar-link {{ isRouteActive('qrcode') ? 'active' : '' }}" href="{{ route('qrcode') }}"
+                            aria-expanded="false">
+                            <span>
+                                <i class="ti ti-qrcode"></i>
+                            </span>
+                            <span class="hide-menu">QR Code</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+                            <span class="d-flex">
+                                <i class="ti ti-clock"></i>
+                            </span>
+                            <span class="hide-menu">Absensi</span>
+                        </a>
+                        <ul aria-expanded="false" class="collapse first-level">
+                            <li class="sidebar-item">
+                                <a href="{{ route('absensi') }}" class="sidebar-link {{ isRouteActive('absensi') ? 'active' : '' }}">
+                                    <div class="round-16 d-flex align-items-center justify-content-center">
+                                        <i class="ti ti-circle"></i>
+                                    </div>
+                                    <span class="hide-menu">Data Absensi</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="{{ route('scan') }}" class="sidebar-link {{ isRouteActive('scan') ? 'active' : '' }}">
+                                    <div class="round-16 d-flex align-items-center justify-content-center">
+                                        <i class="ti ti-circle"></i>
+                                    </div>
+                                    <span class="hide-menu">Scan</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                @endrole
             </ul>
         </nav>
     </div>

@@ -1,9 +1,9 @@
 @extends('layouting.auth')
 
-@section('title', 'QR Code')
+@section('title', 'Daftar Peserta')
 
 @section('content')
-    <x-card.breadcrumb main="Home" current="QR Code" route="{{ route('qrcode') }}" />
+    <x-card.breadcrumb main="Home" current="Daftar Peserta" route="{{ route('qrcode') }}" />
 
     <div class="row">
         <div class="col-12 col-lg-6">
@@ -40,20 +40,29 @@
 
     <div class="card card-body">
         <div class="row">
-            <div class="col-12 col-lg-6">
-                <x-search.basic placeholder="Members" />
+            <div class="col-12 col-lg-4">
+                <x-search.basic placeholder="Peserta" />
             </div>
-            <div class="col-12 col-lg-6 text-end d-flex justify-content-md-end justify-content-center mt-3 mt-md-0 gap-2">
-                <x-search.filter>
-                    <option value="member">Member</option>
-                    <option value="panitia">Panitia</option>
-                    <option value="pengurus">Pengurus</option>
-                </x-search.filter>
+            <div class="col-12 col-lg-8 text-end d-flex justify-content-md-end justify-content-center mt-3 mt-md-0 gap-2">
+                @can('reminder acara')
+                    @if ($reminder['exist'])
+                        <a href="{{ route('pendaftar.reminder-acara') }}" id="btnReminder"
+                            class="btn btn-warning text-capitalize fs-4">
+                            Reminder Acara H-{{ $reminder['days'] }}
+                        </a>
+                    @endif
+                @endcan
 
                 <a target="_blank" href="{{ route('pendaftar.download') }}" class="btn btn-success fs-3 fw-bold">
                     <i class="ti ti-file-spreadsheet"></i>
                     Download
                 </a>
+
+                <x-search.filter>
+                    <option value="member">Member</option>
+                    <option value="non member">Non Member</option>
+                </x-search.filter>
+
             </div>
         </div>
     </div>
@@ -83,7 +92,8 @@
                             <span>{{ $item->certificate_name }}</span>
                         </td>
                         <td>
-                            <img src="{{ asset('storage/qrcodes/' . $item->qrcode) }}" alt="QR Code {{ $item->name }}" width="100" height="100">
+                            <img src="{{ asset('storage/qrcodes/' . $item->qrcode) }}" alt="QR Code {{ $item->name }}"
+                                width="100" height="100">
                         </td>
                         <td>
                             <span class="text-capitalize">{{ $item->type }}</span>
@@ -93,4 +103,34 @@
             @endslot
         </x-table.basic>
     </div>
+
+    <x-loading message="Sedang mengirimkan pesan whatsapp, mohon tidak menutup aplikasi ini." />
 @endsection
+
+@push('scripts')
+    <script>
+        $("#btnReminder").on('click', function(e) {
+            e.preventDefault();
+
+            var href = $(this).attr('href');
+
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Anda akan mengirimkan reminder acara.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, kirim!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $("#loading").css("display", "flex");
+                    window.location.href = href;
+                }
+            });
+
+            $(this).attr('href');
+        })
+    </script>
+@endpush

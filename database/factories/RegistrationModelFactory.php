@@ -18,7 +18,7 @@ class RegistrationModelFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'phone_number' => fake()->name(),
+            'phone_number' => '087893504595',
             'email' => fake()->safeEmail(),
             'tickets' => fake()->randomDigit(),
             'amount' => fake()->numberBetween(1000000, 20000000),

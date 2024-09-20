@@ -16,7 +16,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->redirectGuestsTo('login');
 
         RedirectIfAuthenticated::redirectUsing(function () {
-            return route('events');
+            if (auth()->user()->hasRole('super-admin')) {
+                return route('events');
+            } else {
+                return route('pendaftar');
+            }
         });
     })
     ->withExceptions(function (Exceptions $exceptions) {

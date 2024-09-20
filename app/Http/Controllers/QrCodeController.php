@@ -35,6 +35,17 @@ class QrCodeController extends Controller
         return 'Successfully!';
     }
 
+    public function sendMessage(Request $request)
+    {
+        $phoneNumber = '087893504595';
+        $message = urlencode('Hello, this is a message from Laravel!');
+
+        $whatsappUrl = "https://wa.me/{$phoneNumber}?text={$message}";
+
+        // Redirect to WhatsApp
+        return redirect($whatsappUrl);
+    }
+
     public function whatsapp()
     {
         $nama = "Josep";

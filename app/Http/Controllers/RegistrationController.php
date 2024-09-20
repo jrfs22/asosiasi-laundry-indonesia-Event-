@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\PesertaExport;
 use Event;
 use Exception;
 use App\Models\EventsModel;
 use App\Models\MembersModel;
 use Illuminate\Http\Request;
+use App\Exports\PesertaExport;
 use App\Exports\PendaftarExport;
 use App\Models\ParticipantsModel;
 use App\Models\RegistrationModel;
@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Services\NotificationService;
 use Illuminate\Support\Facades\Validator;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
@@ -26,8 +27,7 @@ class RegistrationController extends Controller
     {
         $event = EventsModel::with('participants')->latest()->first();
 
-        $event->participant_summary = $event->participants->count();
-
+        $event->participant_summary = $event->participants->where('qrcode', '!=', null)->count() + 18;
         if($event->participant_summary < $event->max_participants) {
             return view('before-login.registration');
         } else {
@@ -150,8 +150,9 @@ class RegistrationController extends Controller
                     }
 
                     DB::commit();
+                    $notificationService = new NotificationService;
 
-                    $this->notification(
+                    $notificationService->sendRegistrationNotification(
                         $registration->name,
                         $registration->member,
                         $registration->tickets,
@@ -211,12 +212,13 @@ class RegistrationController extends Controller
 
                 if ($registrasi->save()) {
                     DB::commit();
+                    $notificationService = new NotificationService;
 
                     foreach ($registrasi->participants as $item) {
-                        $this->notification_konfirmasi(
+                        $notificationService->sendPaymentConfirmation(
                             $item->name,
                             route('tickets', [
-                                'name' => formatString($item->name),
+                                'name' => formatString(string: $item->name),
                                 'participant_id' => $item->id
                             ]),
                             $item->phone_number,
@@ -259,8 +261,9 @@ class RegistrationController extends Controller
         try {
             $register = RegistrationModel::where('payment_status', operator: 'belum bayar')->get();
 
+            $notificationService = new NotificationService;
             foreach ($register as $item) {
-                $this->sendNotifikasiReminderPembayaran($item->name, $item->tickets, $item->amount, $item->phone_number);
+                $notificationService->sendPaymentReminder($item->name, $item->tickets, $item->amount, $item->phone_number);
 
                 sleep(rand(1, 10));
             }
@@ -352,101 +355,6 @@ class RegistrationController extends Controller
         return $filename;
     }
 
-    public function notification_konfirmasi($nama, $link, $target)
-    {
-        $token = env('WA_TOKEN');
-
-        $getPesan = 'Halo, ' . $nama . '
-
-Terima kasih telah menyelesaikan pendaftaran dan pembayaran tiket. Berikut adalah barcode pass masuk Anda yang akan digunakan pada saat acara:
-
-' . $link . '
-
-Harap simpan barcode ini dengan baik dan tunjukkan pada saat hari H di pintu masuk untuk memudahkan proses registrasi.
-
-Jika ada pertanyaan lebih lanjut, jangan ragu untuk menghubungi kami di WhatsApp ini.
-
-Sampai jumpa di acara nanti!
-
-Salam,
-*ASLI DPD RIAU*';
-
-        $this->sendNotification($getPesan, $target);
-    }
-
-    public function notification(
-        $nama,
-        $member,
-        $tiket,
-        $harga,
-        $subtotal,
-        $diskon,
-        $diskon_percentage,
-        $final,
-        $target
-    ) {
-
-        $getPesan = '*E-INVOICE PEMESANAN TIKET*
-
-Terima kasih telah melakukan pemesanan. Berikut adalah rincian transaksi Anda:
-
-Tanggal Transaksi : *' . now() . '*
-Pemesan : *' . $nama . '*
-Member : *' . $member . '*
-
-Jumlah Tiket : *' . $tiket . '*
-Harga per tiket : *' . idrFormat($harga) . '*
-Subtotal : *' . idrFormat($subtotal) . '*
-Diskon (' . $diskon_percentage . '%): *' . idrFormat($diskon) . '*
-
-Total Pembayaran : *' . idrFormat($final) . '*
-
-Silakan lakukan pembayaran ke rekening berikut:
-
-Bank BCA
-No. Rekening: *0343744665*
-A.n.: *Agustony Pangaribuan*
-
-*Note: Setelah melakukan pembayaran, harap kirimkan bukti transfer ke WhatsApp ini.*
-
-Informasi Penting:
-Barcode untuk pass masuk acara pada hari H akan dibagikan ke masing-masing nomor peserta yang sudah melakukan pendaftaran dan pembayaran. Pastikan nomor whatsapp Anda aktif dan dapat menerima pesan.
-
-Terima kasih atas kepercayaan Anda.
-
-Salam,
-*ASLI DPD RIAU*';
-
-        $this->sendNotification($getPesan, $target);
-    }
-
-    private function sendNotifikasiReminderPembayaran($name, $tickets, $amount, $phone_number)
-    {
-        $getPesan = '*REMINDER PEMBAYARAN TIKET*
-
-Hai, *' . $name . '*! Kami ingin mengingatkan bahwa pembayaran tiket Anda belum kami terima. Berikut detail pesanan Anda:
-
-Tanggal Pesanan : *' . now() . '*
-Nama Pemesan : *' . $name . '*
-Jumlah Tiket : *' . $tickets . '*
-Total Pembayaran : *' . idrFormat($amount) . '*
-
-Silakan transfer ke rekening berikut:
-
-Bank BCA
-No. Rekening: *0343744665*
-A.n.: *Agustony Pangaribuan*
-
-*Note: Kirim bukti transfer ke WhatsApp ini setelah melakukan pembayaran, Jika tidak maka registrasi belum bisa diproses.*
-
-Terima kasih atas kepercayaan Anda. Sampai ketemu di acara nanti!
-
-Salam,
-*ASLI DPD RIAU*';
-
-            $this->sendNotification($getPesan, $phone_number);
-    }
-
     private function formatPhoneNumber($phoneNumber)
     {
         $phoneNumber = preg_replace('/\D/', '', $phoneNumber);
@@ -460,23 +368,6 @@ Salam,
         }
 
         return $phoneNumber;
-    }
-
-    public function cekBarcode($name, $registration_id)
-    {
-        $register = RegistrationModel::where('id', $registration_id)->exists();
-
-        if($register) {
-            $participant = ParticipantsModel::where(DB::raw("REPLACE(LOWER(name), ' ', '-')"), $name)->exists();
-
-            return response()->json([
-                'exists' => true
-            ]);
-        } else {
-            return response()->json([
-                'exists' => false
-            ]);
-        }
     }
 }
 

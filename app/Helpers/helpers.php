@@ -24,3 +24,11 @@ function formatString($string) {
 
     return $formattedString;
 }
+
+function daysUntilDate(string $target)
+{
+    $now = Carbon::now();
+    $target = Carbon::parse($target)->format('Y-m-d');
+
+    return round($now->diffInDays($target));
+}

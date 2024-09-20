@@ -141,7 +141,7 @@ nav.navbar .company-name {
 }
 
 footer {
-    color: #003D75;
+    color: #003d75;
     text-align: center;
     font-family: var(--poppins);
     font-size: 26px;
@@ -466,7 +466,7 @@ footer img {
 }
 
 .tickets h5 {
-    color: #003D75;
+    color: #003d75;
     text-align: center;
     font-family: var(--inter);
     font-size: 50px;
@@ -486,7 +486,7 @@ footer img {
 }
 
 .tickets .nama-acara {
-    color: #003D75;
+    color: #003d75;
     font-family: var(--poppins);
     font-size: 18px;
     font-style: normal;
@@ -494,7 +494,7 @@ footer img {
     line-height: normal;
 }
 
-.tickets .row{
+.tickets .row {
     margin-top: 50px;
 }
 
@@ -509,13 +509,13 @@ footer img {
 }
 
 .btn-verify {
-    color: #003D75;
+    color: #003d75;
     font-size: 30px;
 }
 
 #btn-registrasi {
-    background-color: #20A9FB;
-    border-color: #20A9FB;
+    background-color: #20a9fb;
+    border-color: #20a9fb;
 }
 
 .poster {
@@ -546,7 +546,7 @@ input[readonly]:focus {
 }
 
 .close-registration h1 {
-    color: #003D75;
+    color: #003d75;
     text-align: center;
     font-family: var(--inter);
     font-size: 50px;
@@ -565,6 +565,91 @@ input[readonly]:focus {
     line-height: normal;
 }
 
+.loading-container {
+    position: fixed;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.loading-container p {
+    color: #000;
+    text-align: center;
+    font-family: var(--poppins);
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.lds-ellipsis,
+.lds-ellipsis div {
+    box-sizing: border-box;
+}
+.lds-ellipsis {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+.lds-ellipsis div {
+    position: absolute;
+    top: 33.33333px;
+    width: 18.33333px;
+    height: 18.33333px;
+    border-radius: 50%;
+    background: #003D75;;
+    animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+.lds-ellipsis div:nth-child(1) {
+    left: 8px;
+    animation: lds-ellipsis1 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(2) {
+    left: 8px;
+    animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(3) {
+    left: 32px;
+    animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(4) {
+    left: 56px;
+    animation: lds-ellipsis3 0.6s infinite;
+}
+@keyframes lds-ellipsis1 {
+    0% {
+        transform: scale(0);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+@keyframes lds-ellipsis3 {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(0);
+    }
+}
+@keyframes lds-ellipsis2 {
+    0% {
+        transform: translate(0, 0);
+    }
+    100% {
+        transform: translate(24px, 0);
+    }
+}
+
 @media (max-width: 576px) {
     .container-beranda {
         margin-right: 0;
@@ -579,9 +664,8 @@ input[readonly]:focus {
     }
 
     .container-beranda .navbar-brand {
-        gap: 5px!important;
+        gap: 5px !important;
     }
-
 
     .container-beranda .navbar-brand img {
         width: 80px;
@@ -598,7 +682,7 @@ input[readonly]:focus {
         max-width: 75%;
     }
 
-    .container-beranda .beranda h1{
+    .container-beranda .beranda h1 {
         font-size: 33px;
         margin-top: 30px;
     }
@@ -626,7 +710,7 @@ input[readonly]:focus {
 
     .hitung-mundur p.highlight {
         font-size: 18px;
-        color: #003D75;
+        color: #003d75;
     }
 
     .hitung-mundur .card span,
@@ -692,7 +776,8 @@ input[readonly]:focus {
         font-size: 14px;
     }
 
-    .registration .card.wizard-form .form-control, .registration .card.wizard-form .form-select {
+    .registration .card.wizard-form .form-control,
+    .registration .card.wizard-form .form-select {
         font-size: 16px;
     }
 
@@ -715,7 +800,7 @@ input[readonly]:focus {
         padding-right: 20px;
     }
 
-    .tickets .row{
+    .tickets .row {
         margin-top: 10px;
         display: flex;
     }
@@ -746,7 +831,6 @@ input[readonly]:focus {
     }
 }
 
-
 /* Small devices (tablets) */
 @media (min-width: 576px) and (max-width: 900px) {
     .container-beranda {
@@ -762,9 +846,8 @@ input[readonly]:focus {
     }
 
     .container-beranda .navbar-brand {
-        gap: 5px!important;
+        gap: 5px !important;
     }
-
 
     .container-beranda .navbar-brand img {
         width: 80px;
@@ -781,7 +864,7 @@ input[readonly]:focus {
         max-width: 75%;
     }
 
-    .container-beranda .beranda h1{
+    .container-beranda .beranda h1 {
         font-size: 33px;
         margin-top: 30px;
     }
@@ -809,7 +892,7 @@ input[readonly]:focus {
 
     .hitung-mundur p.highlight {
         font-size: 18px;
-        color: #003D75;
+        color: #003d75;
     }
 
     .hitung-mundur .card span,
@@ -870,7 +953,8 @@ input[readonly]:focus {
         font-size: 14px;
     }
 
-    .registration .card.wizard-form .form-control, .registration .card.wizard-form .form-select {
+    .registration .card.wizard-form .form-control,
+    .registration .card.wizard-form .form-select {
         font-size: 16px;
     }
 
@@ -893,7 +977,7 @@ input[readonly]:focus {
         padding-right: 20px;
     }
 
-    .tickets .row{
+    .tickets .row {
         margin-top: 10px;
         display: flex;
     }

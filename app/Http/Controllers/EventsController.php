@@ -9,7 +9,14 @@ class EventsController extends Controller
 {
     public function index()
     {
-        $events = EventsModel::all();
+        $events = EventsModel::with('participants')->get();
+
+        if ($events) {
+            foreach ($events as $event) {
+                $event->participants_summary = $event->participants->count();
+            }
+        }
+
         return view('after-login.events.index')->with('events', $events);
     }
 }

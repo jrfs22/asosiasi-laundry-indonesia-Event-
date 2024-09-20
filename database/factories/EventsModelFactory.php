@@ -19,7 +19,7 @@ class EventsModelFactory extends Factory
         return [
             'name' => 'Workshop Penanganan Laundry Satuan & Teknik Pengangkatan Noda Satuan',
             'poster' => fake()->name() . fake()->fileExtension(),
-            'date' => now(),
+            'date' => '2024-09-28 06:00:28',
             'start_time' => '10:00:00',
             'end_time' => '12:00:00',
             'max_participants' => 70,
