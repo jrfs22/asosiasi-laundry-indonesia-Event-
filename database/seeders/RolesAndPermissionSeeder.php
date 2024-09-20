@@ -31,6 +31,9 @@ class RolesAndPermissionSeeder extends Seeder
 
         Permission::create(['name' => 'create absensi']);
         Permission::create(['name' => 'read absensi']);
+        Permission::create(['name' => 'delete absensi']);
+        Permission::create(['name' => 'scan absensi']);
+        Permission::create(['name' => 'download absensi']);
 
         // create roles and assign created permissions
 
@@ -39,6 +42,9 @@ class RolesAndPermissionSeeder extends Seeder
         $role->givePermissionTo('view pendaftar');
         $role->givePermissionTo('view peserta');
         $role->givePermissionTo('view qrcode');
+
+        $role->givePermissionTo('read absensi');
+        $role->givePermissionTo('download absensi');
 
         $role = Role::create(['name' => 'super-admin']);
         $role->givePermissionTo(Permission::all());

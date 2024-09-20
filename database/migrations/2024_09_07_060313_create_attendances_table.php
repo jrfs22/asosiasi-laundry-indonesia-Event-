@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('registration_id');
             $table->unsignedBigInteger('participant_id');
             $table->enum('type', [
-                'absensi', 'konsumsi'
+                'kehadiran', 'konsumsi'
             ]);
             $table->timestamps();
 
